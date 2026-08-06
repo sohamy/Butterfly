@@ -1,7 +1,8 @@
 ---
-const { code, title, subtitle } = Astro.props;
+const { code, title, subtitle, watermark } = Astro.props;
 ---
-<div class="section-title">
+<div class="section-title" data-reveal>
+  {watermark && <span class="watermark" aria-hidden="true">{watermark}</span>}
   <span>{code}</span>
   <h2>{title}</h2>
   {subtitle && <p>{subtitle}</p>}

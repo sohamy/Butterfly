@@ -2,6 +2,13 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 const { title = '해원국립대학교', description = '극시리 자캐커뮤니티 소개 홈페이지' } = Astro.props;
+const ticker = [
+  '감염 발생 93일차 · 캠퍼스 전 구역 봉쇄 유지',
+  '외부 통신망 두절 · 구조 요청 응답 없음',
+  '의과대학 연구동 출입 통제 · 카드키 필요',
+  '야간 이동 금지 · 소음 최소화 권고',
+  '물림 및 혈액 접촉 시 즉시 보고할 것',
+];
 ---
 <!doctype html>
 <html lang="ko">
@@ -14,21 +21,90 @@ const { title = '해원국립대학교', description = '극시리 자캐커뮤�
   </head>
   <body>
     <div class="noise" aria-hidden="true"></div>
+    <div class="scanlines" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="sweep" aria-hidden="true"></div>
+    <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progress"></div></div>
     <Header />
     <main><slot /></main>
+    <div class="ticker" aria-hidden="true">
+      <div>
+        {[...ticker, ...ticker].map((line) => <span>{line}</span>)}
+      </div>
+    </div>
     <footer class="site-footer">
       <span>HAEWON NATIONAL UNIVERSITY // INCIDENT DAY 93</span>
       <span>극시리 · 좀비 아포칼립스 · 조사 · 전투 · 감염</span>
     </footer>
     <script>
-      const links = document.querySelectorAll('a[href^="#"]');
-      links.forEach((link) => link.addEventListener('click', (event) => {
-        const target = document.querySelector(link.getAttribute('href'));
-        if (target) {
+      // 부드러운 앵커 이동
+      document.querySelectorAll('a[href^="#"]').forEach((link) => {
+        link.addEventListener('click', (event) => {
+          const target = document.querySelector(link.getAttribute('href'));
+          if (!target) return;
           event.preventDefault();
           target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      // 스크롤 진행 표시줄
+      const progress = document.getElementById('progress');
+      const onScroll = () => {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        progress.style.width = `${max > 0 ? (window.scrollY / max) * 100 : 0}%`;
+      };
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+      // 등장 애니메이션
+      const revealed = document.querySelectorAll('[data-reveal]');
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(
+          (entries) => entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }),
+          { rootMargin: '0px 0px -12% 0px', threshold: 0.08 }
+        );
+        revealed.forEach((el) => observer.observe(el));
+      } else {
+        revealed.forEach((el) => el.classList.add('is-visible'));
+      }
+
+      // 현재 섹션 메뉴 강조
+      const navLinks = [...document.querySelectorAll('.site-header nav a')];
+      const sections = navLinks
+        .map((link) => document.querySelector(link.getAttribute('href')))
+        .filter(Boolean);
+      if ('IntersectionObserver' in window && sections.length) {
+        const spy = new IntersectionObserver(
+          (entries) => entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            navLinks.forEach((link) =>
+              link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`)
+            );
+          }),
+          { rootMargin: '-45% 0px -50% 0px' }
+        );
+        sections.forEach((section) => spy.observe(section));
+      }
+
+      // REC 타이머 (감염 93일차 기준 경과 시간)
+      const rec = document.getElementById('rec-time');
+      const clock = document.getElementById('sys-clock');
+      const pad = (value) => String(value).padStart(2, '0');
+      let seconds = 0;
+      const tick = () => {
+        seconds += 1;
+        if (rec) rec.textContent = `REC 00:93:${pad(seconds % 60)}`;
+        if (clock) {
+          const now = new Date();
+          clock.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
         }
-      }));
+      };
+      tick();
+      setInterval(tick, 1000);
     </script>
   </body>
 </html>
