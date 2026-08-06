@@ -2,191 +2,344 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionTitle from '../components/SectionTitle.astro';
 
-const stats = [
-  ['힘', '근접 공격력 · 문을 부수거나 물체를 옮기는 완력', '0–5'],
-  ['민첩', '회피 · 도주 · 은신 이동', '0–5'],
-  ['정신', '감염 저항 · 공포와 패닉 극복', '0–5'],
-  ['지식', '기록 해독 · 응급처치 · 연구 자료 해석', '0–5'],
-  ['운', '아이템 발견 · 최악의 판정을 비껴가는 확률', '0–5'],
+const quick = [
+  ['#calendar', '✎', '학사일정', '1일차 ~ 12일차 운영'],
+  ['#guide', '☰', '학사안내', '조사 · 전투 · 감염 규정'],
+  ['#apply', '☗', '모집요강', '포지션 및 정원 안내'],
+  ['#notice', '✉', '상황실 문의', '093-000-9393'],
+];
+
+const notices = [
+  ['[긴급] 교내 전 구역 출입 통제 연장 안내 (제93호)', '09.14', 'new'],
+  ['[안내] 학생회관 임시 거점 운영 및 물자 배분 지침', '09.13', 'new'],
+  ['[학사] 현장조사 참가 신청 및 판정 접수 방법 안내', '09.12', 'imp'],
+  ['[안내] 중앙도서관 부분 개방에 따른 열람 제한 사항', '09.11', ''],
+  ['[보건] 물림 및 혈액 접촉 발생 시 신고 절차 안내', '09.10', ''],
+  ['[학사] 의과대학 연구동 출입 카드 재발급 중단 안내', '09.08', ''],
 ];
 
 const systems = [
-  ['01', '조사', '개방된 구역을 수색해 백신 재료, 의약품, 무기, 기록, 그리고 먼저 들어갔던 생존자의 흔적을 확보합니다. 구역은 일정에 따라 순차적으로 열립니다.'],
-  ['02', '전투', '좀비와 조우하면 전투 판정이 발생합니다. 결과는 무사 생환 · 경상 · 중상 · 물림 · 사망 다섯 단계로 나뉘며, 동행자의 판정이 서로에게 영향을 줍니다.'],
+  ['01', '조사', '개방된 구역을 수색해 백신 재료, 의약품, 무기, 기록, 먼저 들어간 생존자의 흔적을 확보합니다. 구역은 학사일정에 따라 순차적으로 개방됩니다.'],
+  ['02', '전투', '감염체와 조우하면 전투 판정이 발생합니다. 결과는 무사 생환 · 경상 · 중상 · 물림 · 사망 다섯 단계이며, 동행자의 판정이 서로에게 영향을 줍니다.'],
   ['03', '감염', '물림과 감염 혈액 노출은 감염 판정을 부릅니다. 잠복기에는 본인도 알아차리지 못하며, 억제제로 진행을 늦출 수는 있어도 되돌릴 수는 없습니다.'],
-  ['04', '백신', '혈액 샘플, 연구 기록, 항체 데이터, 합성 시약, 그리고 가동 가능한 연구시설. 다섯 가지가 모두 모여야 완성에 도달할 수 있습니다.'],
-  ['05', '아이템', '응급처치 키트, 억제제, 방호복, 무기, 출입 카드. 소지품은 조사 범위와 생존 확률에 직접 반영되며 서로 양도할 수 있습니다.'],
+  ['04', '백신', '혈액 샘플, 연구 기록, 항체 데이터, 합성 시약, 가동 가능한 연구시설. 다섯 항목이 모두 모여야 완성에 도달할 수 있습니다.'],
+  ['05', '아이템', '응급처치 키트, 억제제, 방호복, 무기, 출입 카드. 소지품은 조사 범위와 생존 확률에 직접 반영되며 참가자 간 양도가 가능합니다.'],
   ['06', '엔딩', '백신 · 탈출 · 희생 · 전멸 · 진실 · 은폐. 확보한 정보량과 마지막 날의 선택이 각자의 결말을 나눕니다.'],
 ];
 
-const timeline = [
-  { act: 'ACT I — 접촉', note: '아직은 서로를 믿어도 되는 날들' },
-  { day: '1D', type: '일상', title: '남겨진 사람들', text: '흩어져 있던 생존자들이 학생회관에 모입니다. 첫 만남, 자기소개, 그리고 임시 거점 정비.' },
-  { day: '2D', type: '일상', title: '물약게임', text: '긴장을 푸는 짧은 이벤트 데이. 웃고 떠드는 사이 누군가는 감추고 싶은 것을 흘립니다.' },
-
-  { act: 'ACT II — 균열', note: '시리어스 돌입 · 사망 판정 개시' },
-  { day: '3D', type: '조사', title: '학생회관 수색', text: '봉쇄 첫날의 기록이 발견됩니다. 그리고 학생회장이 시신으로 돌아옵니다.' },
-  { day: '4D', type: '조사', title: '중앙도서관 개방', text: '감염 초기 대응 문서와 캠퍼스 도면을 확보합니다. 의과대학으로 가는 경로가 드러납니다.' },
-  { day: '5D', type: '전투', title: '진입로 확보', text: '대학병원으로 향하는 길목의 무리를 밀어냅니다. 첫 대규모 전투이자 첫 중상자.' },
-  { day: '6D', type: '조사', title: '대학병원', text: '의약품과 보관 중이던 혈액 샘플을 회수합니다. 지하에서 무언가 움직인 흔적도 함께.' },
-
-  { act: 'INTERVAL — 휴식기', note: '약 1주일의 공백' },
-  { day: '휴식기', type: '휴식', title: '이레 동안', text: '감염이 조용히 진행됩니다. 장례, 물자 배분, 그리고 누구를 남길지에 대한 첫 다툼.' },
-
-  { act: 'ACT III — 붕괴', note: '되돌릴 수 없는 구간' },
-  { day: '7D', type: '전투', title: '변이체 출현', text: '기존 개체와 다른 무언가가 나타납니다. 군인 MPC가 이 전투에서 사망합니다.' },
-  { day: '8D', type: '조사', title: '생명과학관', text: '항체 데이터의 일부와 실험 기록을 확보합니다. 연구가 어디서 멈췄는지 드러납니다.' },
-  { day: '9D', type: '일상', title: '재정비', text: '남은 물자를 나누고 부상자를 돌보는 하루. 마지막으로 서로에게 말을 건넬 수 있는 시간.' },
-  { day: '10D', type: '전투', title: '연구동 진입', text: '의과대학 연구동의 봉쇄를 뚫습니다. 카드키와 방호복 보유 여부가 생사를 가릅니다.' },
-
-  { act: 'ACT IV — 결말', note: '선택은 되돌릴 수 없습니다' },
-  { day: '11D', type: '조사', title: '최종 조사', text: '백신을 완성할지, 진실을 공개할지, 이곳을 버릴지. 각자의 선택을 제출합니다.' },
-  { day: '12D', type: '엔딩', title: '마지막 날', text: '모아온 것과 포기한 것의 합계가 결말이 됩니다.' },
+const stats = [
+  ['힘', '근접 공격력 · 문을 부수거나 물체를 옮기는 완력', '0 – 5'],
+  ['민첩', '회피 · 도주 · 은신 이동', '0 – 5'],
+  ['정신', '감염 저항 · 공포와 패닉 극복', '0 – 5'],
+  ['지식', '기록 해독 · 응급처치 · 연구 자료 해석', '0 – 5'],
+  ['운', '아이템 발견 · 최악의 판정을 비껴가는 확률', '0 – 5'],
 ];
 
-const typeClass = {
-  전투: 'combat',
-  조사: 'investigation',
-  휴식: 'rest',
-  엔딩: 'ending',
-};
+const calendar = [
+  { term: '제1기 · 적응 기간', note: '판정 없음 · 상호작용 중심' },
+  { day: '1일차', cat: '교내활동', cls: 'class', title: '개강 · 남겨진 사람들', desc: '흩어져 있던 생존자들이 학생회관에 모입니다. 첫 만남과 임시 거점 정비.' },
+  { day: '2일차', cat: '교내활동', cls: 'class', title: '물약게임', desc: '긴장을 푸는 짧은 이벤트. 웃고 떠드는 사이 누군가는 감추고 싶은 것을 흘립니다.' },
+
+  { term: '제2기 · 현장조사 개시', note: '시리어스 돌입 · 사망 판정 적용' },
+  { day: '3일차', cat: '현장조사', cls: 'field', title: '학생회관 수색', desc: '봉쇄 첫날의 기록이 발견됩니다. 그리고 학생회장이 시신으로 돌아옵니다.' },
+  { day: '4일차', cat: '현장조사', cls: 'field', title: '중앙도서관 개방', desc: '초기 대응 문서와 캠퍼스 도면을 확보합니다. 의과대학으로 가는 경로가 드러납니다.' },
+  { day: '5일차', cat: '비상대응', cls: 'risk', title: '진입로 확보', desc: '대학병원으로 향하는 길목의 무리를 밀어냅니다. 첫 대규모 전투이자 첫 중상자.' },
+  { day: '6일차', cat: '현장조사', cls: 'field', title: '대학병원 조사', desc: '의약품과 보관 중이던 혈액 샘플을 회수합니다. 지하에서 무언가 움직인 흔적도 함께.' },
+
+  { term: '휴업 기간', note: '약 1주일 · 판정 없음' },
+  { day: '휴업', cat: '휴업', cls: 'break', title: '이레 동안', desc: '감염이 조용히 진행됩니다. 장례, 물자 배분, 그리고 누구를 남길지에 대한 첫 다툼.' },
+
+  { term: '제3기 · 비상 운영', note: '되돌릴 수 없는 구간' },
+  { day: '7일차', cat: '비상대응', cls: 'risk', title: '변이체 출현', desc: '기존 개체와 다른 무언가가 나타납니다. 군인 MPC가 이 전투에서 사망합니다.' },
+  { day: '8일차', cat: '현장조사', cls: 'field', title: '생명과학관 조사', desc: '항체 데이터의 일부와 실험 기록을 확보합니다. 연구가 어디서 멈췄는지 드러납니다.' },
+  { day: '9일차', cat: '교내활동', cls: 'class', title: '재정비', desc: '남은 물자를 나누고 부상자를 돌보는 하루. 마지막으로 서로에게 말을 건넬 수 있는 시간.' },
+  { day: '10일차', cat: '비상대응', cls: 'risk', title: '연구동 진입', desc: '의과대학 연구동의 봉쇄를 뚫습니다. 카드키와 방호복 보유 여부가 생사를 가릅니다.' },
+
+  { term: '제4기 · 종료', note: '선택은 되돌릴 수 없습니다' },
+  { day: '11일차', cat: '현장조사', cls: 'field', title: '최종 조사', desc: '백신을 완성할지, 진실을 공개할지, 이곳을 버릴지. 각자의 선택을 제출합니다.' },
+  { day: '12일차', cat: '종강', cls: 'final', title: '마지막 날', desc: '모아온 것과 포기한 것의 합계가 결말이 됩니다.' },
+];
 ---
 <BaseLayout>
-  <section id="home" class="hero section-pad">
-    <div class="hero-grid" aria-hidden="true"></div>
-    <div class="hero-scan" aria-hidden="true"></div>
-    <div class="rec"><i></i><span id="rec-time">REC 00:93:17</span></div>
-    <div class="hero-copy">
-      <p class="eyebrow">RESTRICTED AREA // HAEWON CAMPUS</p>
-      <h1>감염은<br /><em data-text="하루아침에">하루아침에</em><br />세상을 무너뜨렸다.</h1>
-      <p class="hero-summary">감염 발생 93일째. 봉쇄된 해원국립대학교 안에 미완성 백신과, 아무도 말하지 않은 사태의 진실이 남아 있습니다.</p>
-      <div class="hero-meta">
-        <span class="tag">극시리 자캐커뮤니티</span>
-        <span class="tag">좀비 아포칼립스</span>
-        <span class="tag hot">사망 판정 있음</span>
-      </div>
-      <a class="primary-button" href="#world"><span>기록 열람</span></a>
-    </div>
-    <aside class="status-panel">
-      <div><span>LOCATION</span><strong>해원국립대학교</strong></div>
-      <div><span>STATUS</span><strong class="danger">봉쇄</strong></div>
-      <div><span>SURVIVORS</span><strong>UNKNOWN</strong></div>
-      <div><span>OBJECTIVE</span><strong>백신 확보</strong></div>
-    </aside>
-    <div class="scroll-hint" aria-hidden="true">SCROLL<i></i></div>
-  </section>
-
-  <section id="world" class="content-section section-pad">
-    <SectionTitle code="01 / WORLD" title="세계관" subtitle="INCIDENT REPORT — DAY 93" watermark="01" />
-    <div class="document-card wide" data-reveal>
-      <div class="doc-meta">
-        <span>FILE / HNU-093-A</span>
-        <span>CLEARANCE / <b class="redacted">LEVEL 4</b></span>
-        <span>ISSUED / DAY 093</span>
-        <span>STATUS / 미회수</span>
-      </div>
-      <p>정체불명의 감염병이 처음 보고된 것은 93일 전이었습니다.</p>
-      <p>처음에는 흔한 신종 바이러스라고 발표되었습니다. 그러나 감염자는 사망 후 다시 일어나 살아 있는 사람을 무차별적으로 공격했습니다. 감염은 물림과 혈액 접촉으로 번졌고, 정부는 발생 지역을 봉쇄한 뒤 군을 투입했지만 방어선은 열흘을 버티지 못했습니다.</p>
-      <p>도시는 버려졌고 통신은 하나씩 끊어졌습니다. 남은 사람들은 식량과 의약품이 바닥나는 가운데 각자의 방식으로 버티고 있습니다.</p>
-      <blockquote>“해원국립대학교 의과대학에서 백신 연구가 진행되고 있었다.”</blockquote>
-      <p>사태 초기, 의과대학 연구팀은 감염을 막을 백신을 개발하고 있었습니다. 완성 직전 연구소는 외부와 연락이 끊겼고, 연구원들의 생사는 지금까지 확인되지 않았습니다.</p>
-      <div class="audio-log">
-        <span>LAST AUDIO LOG — 재생 시간 00:47</span>
-        <p>“…백신은 아직 완성되지 않았다. 하지만 연구는 끝나지 않았다. 자료와 샘플은… 캠퍼스 안에 남아 있다.”</p>
-        <div class="waveform" aria-hidden="true">
-          {Array.from({ length: 28 }).map((_, i) => <i style={`animation-delay:${(i % 9) * 0.11}s`}></i>)}
+  <!-- 메인 비주얼 -->
+  <section id="home" class="visual">
+    <div class="inner">
+      <div>
+        <span class="visual-tag">HAEWON NATIONAL UNIVERSITY · SINCE 1953</span>
+        <h1>진실을 향해,<br /><em>남은 사람들과 함께.</em></h1>
+        <p>해원국립대학교 공식 홈페이지입니다. 현재 교내 전 구역은 감염병 확산에 따라 폐쇄 중이며, 잔류 인원을 위한 학사 운영만 제한적으로 유지되고 있습니다.</p>
+        <div class="visual-actions">
+          <a class="btn btn-primary" href="#about">대학 안내</a>
+          <a class="btn btn-ghost" href="#apply">모집요강 바로가기</a>
         </div>
       </div>
-      <p class="closing-line">남은 선택지는 하나. 캠퍼스 안으로 들어가 진실을 찾는 것.</p>
+      <div class="emergency-card" data-reveal>
+        <header>
+          <strong>긴급 상황 안내</strong>
+          <span>DAY 093 기준</span>
+        </header>
+        <ul>
+          <li><b>위기경보</b><span>심각 (최고 단계) 유지</span></li>
+          <li><b>캠퍼스</b><span>전 구역 봉쇄 · 출입 통제</span></li>
+          <li><b>잔류 인원</b><span>집계 불가</span></li>
+          <li><b>운영 목표</b><span>백신 자료 확보 및 대피</span></li>
+        </ul>
+        <footer>
+          <span>학생지원처 · 상황실</span>
+          <span>093-000-9393</span>
+        </footer>
+      </div>
     </div>
   </section>
 
-  <section id="system" class="content-section section-pad muted-bg">
-    <SectionTitle code="02 / SYSTEM" title="시스템" subtitle="생존은 수치가 아니라 선택으로 결정됩니다." watermark="02" />
-    <div class="warning-banner" data-reveal>
-      <b>WARNING</b>
-      <span>본 커뮤니티에는 조사, 전투, 부상, 감염, 캐릭터 사망 요소가 포함되어 있습니다. 참여 전 반드시 확인해 주세요.</span>
-    </div>
-    <div class="card-grid">
-      {systems.map(([no, name, text]) => (
-        <article class="system-card bracket" data-reveal>
-          <span>SYS.{no}</span>
-          <h3>{name}</h3>
-          <p>{text}</p>
-          <b class="ghost" aria-hidden="true">{no}</b>
-        </article>
+  <!-- 퀵메뉴 -->
+  <nav class="quick" aria-label="바로가기">
+    <div class="inner">
+      {quick.map(([href, icon, name, desc]) => (
+        <a href={href}>
+          <span class="q-icon" aria-hidden="true">{icon}</span>
+          <span><strong>{name}</strong><small>{desc}</small></span>
+        </a>
       ))}
     </div>
-    <div class="infection-track" data-reveal>
-      <span>잠복</span><i></i><span>초기 증상</span><i></i><span>진행</span><i></i><span>말기</span><i></i><span>완전 변이</span>
-    </div>
-    <div class="stat-table" data-reveal>
-      {stats.map(([name, effect, range]) => <div><strong>{name}</strong><span>{effect}</span><b>{range}</b></div>)}
-      <p>* 기본 능력치는 다섯 항목에 자유롭게 배분합니다. 단, 군인은 힘을, 연구원은 지식을 최대 10까지 설정할 수 있습니다.</p>
-    </div>
-  </section>
+  </nav>
 
-  <section id="timeline" class="content-section section-pad">
-    <SectionTitle code="03 / TIMELINE" title="일정" subtitle="총 12일 · 사건 진행에 따라 일부 일정은 변동될 수 있습니다." watermark="03" />
-    <div class="timeline-legend" data-reveal>
-      <span><i></i>일상</span>
-      <span><i class="i"></i>조사</span>
-      <span><i class="c"></i>전투</span>
-      <span><i class="r"></i>휴식기</span>
-      <span><i class="e"></i>엔딩</span>
-    </div>
-    <div class="timeline">
-      {timeline.map((entry) => entry.act ? (
-        <div class="act-divider" data-reveal><span>{entry.act}</span><small>{entry.note}</small></div>
-      ) : (
-        <div class:list={['timeline-item', typeClass[entry.type]]} data-reveal>
-          <span class="day">{entry.day}</span>
-          <span class="dot"></span>
-          <div class="body">
-            <small>{entry.type}</small>
-            <h3>{entry.title}</h3>
-            <p>{entry.text}</p>
+  <!-- 공지사항 -->
+  <section id="notice" class="section">
+    <div class="inner">
+      <SectionTitle
+        code="NOTICE"
+        title="공지사항"
+        subtitle="교내 상황 및 학사 운영에 관한 안내입니다."
+        more={{ href: '#calendar', label: '전체보기' }}
+      />
+      <div class="board-grid">
+        <div class="board" data-reveal>
+          <h3>학교 소식</h3>
+          <ul>
+            {notices.map(([text, date, badge]) => (
+              <li>
+                {badge && <span class:list={['badge', badge]}>{badge === 'new' ? 'NEW' : '중요'}</span>}
+                <a href="#about">{text}</a>
+                <time>2025.{date}</time>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="notice-side">
+          <div class="side-card dark" data-reveal>
+            <h3>참가 신청 안내</h3>
+            <p>포지션 선점 순으로 접수하며, 캐릭터 설정은 세계관과 충돌하지 않는 범위에서 자유롭게 작성할 수 있습니다.</p>
+            <a class="link" href="#apply">모집요강 확인</a>
+          </div>
+          <div class="side-card" data-reveal>
+            <h3>주요 연락처</h3>
+            <ul class="contact-list">
+              <li><b>상황실</b><span>093-000-9393</span></li>
+              <li><b>학생지원처</b><span>093-000-0111</span></li>
+              <li><b>보건진료소</b><span>093-000-0119</span></li>
+              <li><b>의과대학 연구동</b><span>회선 불통</span></li>
+            </ul>
           </div>
         </div>
-      ))}
-    </div>
-    <div class="timeline-note" data-reveal>
-      <strong>진행 안내</strong>
-      각 일차는 조사 · 전투 판정 접수 후 결과 공개 순으로 진행됩니다. 휴식기는 판정 없이 상호작용만 이루어지며, 참가자 사정에 따라 일차 간격은 조정될 수 있습니다.
+      </div>
     </div>
   </section>
 
-  <section id="character" class="content-section section-pad muted-bg">
-    <SectionTitle code="04 / CHARACTER" title="캐릭터 안내" subtitle="모든 생존자는 서로 다른 이유로 이 캠퍼스에 남아 있습니다." watermark="04" />
-    <div class="character-columns">
-      <div class="role-card mpc bracket" data-reveal>
-        <span>MPC</span>
-        <h3>운영 캐릭터</h3>
-        <ul>
-          <li>군인 <b>1</b></li>
-          <li>연구원 <b>1</b></li>
-          <li>학생회장 <b>1</b></li>
-        </ul>
-        <p>사건의 핵심 정보를 쥐고 스토리를 밀어 올립니다. 일부는 정해진 시점에 이탈합니다.</p>
+  <!-- 대학안내 = 세계관 (감염 기록 구간) -->
+  <section id="about" class="section blackout">
+    <div class="tape" aria-hidden="true"></div>
+    <div class="bl-grid-bg" aria-hidden="true"></div>
+    <div class="bl-noise" aria-hidden="true"></div>
+    <div class="bl-scan" aria-hidden="true"></div>
+    <div class="inner">
+      <div class="bl-head" data-reveal>
+        <span class="bl-rec" id="rec-time">● REC 00:93:17</span>
+        <span class="bl-eng"><i></i>EMERGENCY BROADCAST — HAEWON CAMPUS / DAY 093</span>
+        <h2>감염은 <em data-text="하루아침에">하루아침에</em><br />세상을 무너뜨렸다.</h2>
+        <p>이 구간부터는 학교가 아니라, 학교였던 곳의 기록입니다.</p>
       </div>
-      <div class="role-card bracket" data-reveal>
-        <span>POSITION RATIO</span>
-        <h3>포지션 구성</h3>
-        <p class="role-ratio">군인 : 연구원 : 대학생<br /><strong>1 : 1 : 10</strong></p>
-        <div class="ratio-bar" aria-hidden="true"><i class="s"></i><i class="r"></i><i class="g"></i></div>
-        <p>군인과 연구원은 선점 포지션이며, 그 외 참가 캐릭터는 모두 대학생으로 구성됩니다.</p>
+
+      <div class="bl-grid">
+        <article class="bl-doc" data-reveal>
+          <div class="doc-meta">
+            <span>FILE / HNU-093-A</span>
+            <span>CLEARANCE / <b class="redacted">LEVEL 4</b></span>
+            <span>ISSUED / DAY 093</span>
+            <span>STATUS / 미회수</span>
+          </div>
+          <p>정체불명의 감염병이 처음 보고된 것은 93일 전이었습니다.</p>
+          <p>처음에는 흔한 신종 바이러스라고 발표되었습니다. 그러나 감염자는 사망 후 다시 일어나 살아 있는 사람을 무차별적으로 공격했습니다. 감염은 물림과 혈액 접촉으로 번졌고, 정부는 발생 지역을 봉쇄한 뒤 군을 투입했지만 방어선은 열흘을 버티지 못했습니다.</p>
+          <p>도시는 버려졌고 통신은 하나씩 끊어졌습니다. 남은 사람들은 식량과 의약품이 바닥나는 가운데 각자의 방식으로 버티고 있습니다.</p>
+          <blockquote>“해원국립대학교 의과대학에서 백신 연구가 진행되고 있었다.”</blockquote>
+          <p>사태 초기, 의과대학 연구팀은 감염을 막을 백신을 개발하고 있었습니다. 완성 직전 연구소는 외부와 연락이 끊겼고, 연구원들의 생사는 지금까지 확인되지 않았습니다.</p>
+          <div class="audio-log">
+            <span class="a-head"><i></i>LAST AUDIO LOG — 재생 시간 00:47</span>
+            <p>“…백신은 아직 완성되지 않았다. 하지만 연구는 끝나지 않았다. 자료와 샘플은… 캠퍼스 안에 남아 있다.”</p>
+            <div class="waveform" aria-hidden="true">
+              {Array.from({ length: 30 }).map((_, i) => <i style={`animation-delay:${(i % 9) * 0.11}s`}></i>)}
+            </div>
+          </div>
+          <p class="closing-line">남은 선택지는 하나. 캠퍼스 안으로 들어가 진실을 찾는 것.</p>
+        </article>
+
+        <aside class="bl-panel" data-reveal>
+          <h3>SYS. MONITOR</h3>
+          <dl>
+            <dt>LOCATION</dt><dd>해원국립대학교</dd>
+            <dt>STATUS</dt><dd class="danger">봉쇄 · 통제 불능</dd>
+            <dt>SURVIVORS</dt><dd>UNKNOWN</dd>
+            <dt>OBJECTIVE</dt><dd>백신 확보</dd>
+            <dt>LAST CONTACT</dt><dd>DAY 041 · 의과대학</dd>
+          </dl>
+          <div class="bl-track">
+            <span><i></i>잠복</span>
+            <span><i></i>초기 증상</span>
+            <span><i></i>진행</span>
+            <span><i></i>말기</span>
+            <span><i></i>완전 변이</span>
+          </div>
+        </aside>
       </div>
-      <div class="role-card bracket" data-reveal>
-        <span>GENERAL</span>
-        <h3>대학생</h3>
-        <p>전공과 학년은 자유롭게 설정할 수 있습니다. 다만 봉쇄 이후에도 캠퍼스에 남게 된 이유는 세계관과 충돌하지 않아야 합니다.</p>
-        <p>전투 경험이 없는 캐릭터도 환영합니다. 살아남는 방법은 싸움만이 아닙니다.</p>
+
+      <div class="bl-foot">
+        <span>본 기록은 외부 반출이 금지되어 있습니다 · HNU-093</span>
+        <a href="#guide">학사안내로 돌아가기</a>
       </div>
     </div>
-    <div class="final-message" data-reveal>
-      <span>FINAL DIRECTIVE</span>
-      <p>백신이 실제로 존재하는지, 이미 사라진 희망에 불과한지는 누구도 알지 못합니다.</p>
-      <strong>하지만 이대로라면 모두가 죽는다.</strong>
+    <div class="tape" aria-hidden="true"></div>
+  </section>
+
+  <!-- 학사안내 -->
+  <section id="guide" class="section gray">
+    <div class="inner">
+      <SectionTitle
+        code="ACADEMICS"
+        title="학사안내"
+        subtitle="생존은 수치가 아니라 선택으로 결정됩니다."
+        more={{ href: '#calendar', label: '학사일정 보기' }}
+      />
+      <div class="notice-strip" data-reveal>
+        <b>필독</b>
+        <span>본 커뮤니티에는 조사, 전투, 부상, 감염, 캐릭터 사망 요소가 포함되어 있습니다. 참가 전 반드시 확인해 주세요.</span>
+      </div>
+      <div class="guide-grid">
+        {systems.map(([no, name, text]) => (
+          <article class="guide-card" data-reveal>
+            <span class="no">SYSTEM {no}</span>
+            <h3>{name}</h3>
+            <p>{text}</p>
+          </article>
+        ))}
+      </div>
+
+      <div class="stage-flow" data-reveal>
+        <span class="stage"><b></b>잠복</span>
+        <span class="arrow" aria-hidden="true">›</span>
+        <span class="stage"><b></b>초기 증상</span>
+        <span class="arrow" aria-hidden="true">›</span>
+        <span class="stage"><b></b>진행</span>
+        <span class="arrow" aria-hidden="true">›</span>
+        <span class="stage"><b></b>말기</span>
+        <span class="arrow" aria-hidden="true">›</span>
+        <span class="stage"><b></b>완전 변이</span>
+      </div>
+
+      <div class="table-wrap" data-reveal>
+        <table class="board-table">
+          <caption>능력치 배분 기준 — 기본 5개 항목에 자유롭게 배분합니다.</caption>
+          <thead>
+            <tr><th style="width:140px">항목</th><th>적용 범위</th><th style="width:110px">배분 범위</th></tr>
+          </thead>
+          <tbody>
+            {stats.map(([name, effect, range]) => (
+              <tr><td><b>{name}</b></td><td>{effect}</td><td class="num">{range}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div class="calendar-note" data-reveal>
+        <b>참고</b>
+        <span>군인 포지션은 힘을, 연구원 포지션은 지식을 최대 10까지 설정할 수 있습니다. 그 외 항목은 포지션과 무관하게 동일한 기준이 적용됩니다.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 학사일정 -->
+  <section id="calendar" class="section">
+    <div class="inner">
+      <SectionTitle
+        code="ACADEMIC CALENDAR"
+        title="학사일정"
+        subtitle="총 12일차 운영 · 사건 진행에 따라 일부 일정은 변동될 수 있습니다."
+      />
+      <div class="table-wrap" data-reveal>
+        <table class="board-table">
+          <thead>
+            <tr><th style="width:110px">일자</th><th style="width:130px">구분</th><th>운영 내용</th></tr>
+          </thead>
+          <tbody>
+            {calendar.map((row) => row.term ? (
+              <tr class="term-row"><td colspan="3">{row.term} — {row.note}</td></tr>
+            ) : (
+              <tr>
+                <td class="day">{row.day}</td>
+                <td><span class:list={['cat', row.cls]}>{row.cat}</span></td>
+                <td><b>{row.title}</b><small>{row.desc}</small></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div class="calendar-note" data-reveal>
+        <b>운영 안내</b>
+        <span>각 일차는 조사 · 전투 판정 접수 후 결과 공개 순으로 진행됩니다. 휴업 기간에는 판정 없이 상호작용만 이루어지며, 참가자 사정에 따라 일차 간격은 조정될 수 있습니다.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 모집요강 -->
+  <section id="apply" class="section gray">
+    <div class="inner">
+      <SectionTitle
+        code="ADMISSION"
+        title="모집요강"
+        subtitle="모든 생존자는 서로 다른 이유로 이 캠퍼스에 남아 있습니다."
+      />
+      <div class="apply-grid">
+        <div class="apply-card point" data-reveal>
+          <span class="cap">MPC</span>
+          <h3>운영 캐릭터</h3>
+          <ul>
+            <li>군인 <b>1명</b></li>
+            <li>연구원 <b>1명</b></li>
+            <li>학생회장 <b>1명</b></li>
+          </ul>
+          <p>사건의 핵심 정보를 쥐고 스토리를 밀어 올립니다. 일부는 정해진 시점에 이탈합니다.</p>
+        </div>
+        <div class="apply-card" data-reveal>
+          <span class="cap">POSITION RATIO</span>
+          <h3>포지션 구성</h3>
+          <p class="ratio">군인 : 연구원 : 대학생<strong>1 : 1 : 10</strong></p>
+          <div class="ratio-bar" aria-hidden="true"><i class="s"></i><i class="r"></i><i class="g"></i></div>
+          <p>군인과 연구원은 선점 포지션이며, 그 외 참가 캐릭터는 모두 대학생으로 구성됩니다.</p>
+        </div>
+        <div class="apply-card" data-reveal>
+          <span class="cap">GENERAL</span>
+          <h3>대학생</h3>
+          <p>전공과 학년은 자유롭게 설정할 수 있습니다. 다만 봉쇄 이후에도 캠퍼스에 남게 된 이유는 세계관과 충돌하지 않아야 합니다.</p>
+          <p>전투 경험이 없는 캐릭터도 환영합니다. 살아남는 방법은 싸움만이 아닙니다.</p>
+        </div>
+      </div>
+
+      <div class="apply-banner" data-reveal>
+        <div>
+          <span class="eng">FINAL DIRECTIVE</span>
+          <h3>백신이 실제로 존재하는지는 누구도 알지 못합니다.</h3>
+          <p>하지만 이대로라면 모두가 죽습니다. 남을 이유가 있는 사람들의 참가를 기다립니다.</p>
+        </div>
+        <a class="btn btn-primary" href="#notice">참가 문의</a>
+      </div>
     </div>
   </section>
 </BaseLayout>

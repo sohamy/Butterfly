@@ -1,17 +1,46 @@
+---
+const menu = [
+  ['#about', '대학안내'],
+  ['#guide', '학사안내'],
+  ['#calendar', '학사일정'],
+  ['#apply', '모집요강'],
+  ['#notice', '공지사항'],
+];
+---
+<div class="util-bar">
+  <div class="inner">
+    <span class="util-alert"><i></i>감염병 위기경보 <b>심각</b> 단계 발령 중 · 캠퍼스 출입 통제</span>
+    <nav aria-label="유틸리티 메뉴">
+      <a href="#notice">학사포털</a>
+      <a href="#notice">중앙도서관</a>
+      <a href="#calendar">사이트맵</a>
+      <a href="#home" class="lang">ENGLISH</a>
+    </nav>
+  </div>
+</div>
 <header class="site-header">
-  <a class="brand" href="#home">
-    <span class="brand-mark">HNU</span>
-    <span>해원국립대학교</span>
-  </a>
-  <nav aria-label="주요 메뉴">
-    <a href="#home">HOME</a>
-    <a href="#world">WORLD</a>
-    <a href="#system">SYSTEM</a>
-    <a href="#timeline">TIMELINE</a>
-    <a href="#character">CHARACTER</a>
-    <span class="header-status" aria-hidden="true">
-      <i class="led"></i>
-      <span id="sys-clock">--:--:--</span>
-    </span>
-  </nav>
+  <div class="inner">
+    <a class="brand" href="#home">
+      <svg class="crest" width="46" height="46" viewBox="0 0 46 46" aria-hidden="true">
+        <circle cx="23" cy="23" r="21.5" fill="none" stroke="#0d2a52" stroke-width="1.5" />
+        <circle cx="23" cy="23" r="17" fill="#0d2a52" />
+        <path d="M23 10.5l10 5.5v9.5c0 6-4.3 10.4-10 12-5.7-1.6-10-6-10-12V16z" fill="#fff" />
+        <path d="M23 13.5l7 3.9v7c0 4.3-3 7.5-7 8.8-4-1.3-7-4.5-7-8.8v-7z" fill="#0d2a52" />
+        <path d="M19.5 20h1.8v3.4h3.4V20h1.8v9h-1.8v-3.9h-3.4V29h-1.8z" fill="#f0c96a" />
+      </svg>
+      <span class="brand-name">
+        <b>해원국립대학교</b>
+        <small>HAEWON NATIONAL UNIVERSITY</small>
+      </span>
+    </a>
+    <nav class="gnb" aria-label="주요 메뉴">
+      {menu.map(([href, label]) => <a href={href}>{label}</a>)}
+    </nav>
+    <div class="header-tools">
+      <div class="header-search">
+        <input type="search" placeholder="통합검색" aria-label="통합검색" />
+        <button type="button" aria-label="검색">⌕</button>
+      </div>
+    </div>
+  </div>
 </header>
