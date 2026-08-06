@@ -2,22 +2,16 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionTitle from '../components/SectionTitle.astro';
 import { link } from '../site';
+import { notices } from '../data/notices';
 
 const quick = [
   [link('calendar/'), '✎', '학사일정', '1일차 ~ 12일차 운영'],
   [link('guide/'), '☰', '학사안내', '조사 · 전투 · 감염 규정'],
-  [link('apply/'), '☗', '모집요강', '포지션 및 정원 안내'],
-  [link('notice/'), '✉', '상황실 문의', '093-000-9393'],
+  [link('apply/'), '☗', '모집요강', '포지션 및 신청 절차'],
+  [link('notice/category/situation/'), '✉', '상황실 알림', '093-000-9393'],
 ];
 
-const notices = [
-  ['[긴급] 교내 전 구역 출입 통제 연장 안내 (제93호)', '09.14', 'new'],
-  ['[안내] 학생회관 임시 거점 운영 및 물자 배분 지침', '09.13', 'new'],
-  ['[학사] 현장조사 참가 신청 및 판정 접수 방법 안내', '09.12', 'imp'],
-  ['[안내] 중앙도서관 부분 개방에 따른 열람 제한 사항', '09.11', ''],
-  ['[보건] 물림 및 혈액 접촉 발생 시 신고 절차 안내', '09.10', ''],
-  ['[학사] 의과대학 연구동 출입 카드 재발급 중단 안내', '09.08', ''],
-];
+const latest = notices.slice(0, 6);
 ---
 <BaseLayout title="메인" active="home" popup={true}>
   <section class="visual">
@@ -73,11 +67,13 @@ const notices = [
         <div class="board" data-reveal>
           <h3>학교 소식</h3>
           <ul>
-            {notices.map(([text, date, badge]) => (
+            {latest.map((notice) => (
               <li>
-                {badge && <span class:list={['badge', badge]}>{badge === 'new' ? 'NEW' : '중요'}</span>}
-                <a href={link('notice/')}>{text}</a>
-                <time>2025.{date}</time>
+                {notice.fixed
+                  ? <span class="badge imp">중요</span>
+                  : notice.isNew && <span class="badge new">NEW</span>}
+                <a href={link(`notice/view/${notice.id}/`)}>{notice.title}</a>
+                <time>{notice.date}</time>
               </li>
             ))}
           </ul>
@@ -86,7 +82,7 @@ const notices = [
           <div class="side-card dark" data-reveal>
             <h3>참가 신청 안내</h3>
             <p>포지션 선점 순으로 접수하며, 캐릭터 설정은 세계관과 충돌하지 않는 범위에서 자유롭게 작성할 수 있습니다.</p>
-            <a class="link" href={link('apply/')}>모집요강 확인</a>
+            <a class="link" href={link('apply/#step')}>신청 절차 확인</a>
           </div>
           <div class="side-card" data-reveal>
             <h3>주요 연락처</h3>

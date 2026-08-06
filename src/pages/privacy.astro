@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { link } from '../site';
+---
+<BaseLayout title="이용 안내" active="privacy">
+  <section class="sub-visual v-notice">
+    <div class="inner">
+      <p class="eng">TERMS</p>
+      <h1>이용 안내</h1>
+      <p>개인정보처리방침 및 이메일 무단수집 거부에 관한 안내입니다.</p>
+    </div>
+  </section>
+
+  <nav class="breadcrumb" aria-label="현재 위치">
+    <div class="inner">
+      <a class="home" href={link()}>홈</a>
+      <span class="sep">›</span>
+      <b>이용 안내</b>
+    </div>
+  </nav>
+
+  <div class="inner" style="padding:54px 24px 84px;max-width:900px">
+    <div class="page-title">
+      <h2>개인정보처리방침</h2>
+      <span class="util">시행일 2025.09.01</span>
+    </div>
+
+    <section class="block" data-reveal>
+      <h3>제1조 (수집 항목)</h3>
+      <p class="lead">본 커뮤니티는 참가 진행에 필요한 최소한의 정보만을 수집합니다.</p>
+      <ul class="view-list">
+        <li>참가 신청 시: 연락 가능한 계정, 캐릭터 프로필(설정상의 정보)</li>
+        <li>운영 과정에서: 판정 접수 내역, 참가 일차 기록</li>
+        <li>수집하지 않는 항목: 실명, 연락처, 주소 등 실제 개인 식별 정보</li>
+      </ul>
+    </section>
+
+    <section class="block" data-reveal>
+      <h3>제2조 (이용 목적)</h3>
+      <p class="lead">수집한 정보는 아래 목적으로만 이용합니다.</p>
+      <ul class="view-list">
+        <li>참가자 확인 및 포지션 배정</li>
+        <li>일차별 판정 진행 및 결과 공개</li>
+        <li>공지 전달 및 운영 문의 응대</li>
+      </ul>
+    </section>
+
+    <section class="block" data-reveal>
+      <h3>제3조 (보유 및 파기)</h3>
+      <p class="lead">
+        커뮤니티 종료 후 운영 기록은 참가자 요청 시 즉시 삭제합니다. 별도 요청이 없는 경우 종료 시점으로부터 일정 기간 보관 후 파기합니다.
+      </p>
+    </section>
+
+    <section class="block" data-reveal>
+      <h3>제4조 (참가자의 권리)</h3>
+      <p class="lead">
+        참가자는 언제든지 본인 관련 기록의 열람, 정정, 삭제를 요청할 수 있습니다. 요청은 상황실(093-000-9393) 또는 학생지원처(093-000-0111)로 접수해 주십시오.
+      </p>
+    </section>
+
+    <div class="page-title" id="email" style="margin-top:56px">
+      <h2>이메일무단수집거부</h2>
+      <span class="util">정보통신망법 제50조의2</span>
+    </div>
+
+    <section class="block" data-reveal>
+      <div class="notice-strip">
+        <b>거부</b>
+        <span>본 홈페이지에 게시된 이메일 주소가 전자우편 수집 프로그램이나 그 밖의 기술적 장치를 이용하여 무단으로 수집되는 것을 거부합니다.</span>
+      </div>
+      <p class="lead">
+        이를 위반한 경우 정보통신망 이용촉진 및 정보보호 등에 관한 법률에 의해 형사처벌될 수 있습니다. 게시된 연락처는 운영 문의 용도로만 사용해 주시기 바랍니다.
+      </p>
+    </section>
+
+    <div class="view-actions">
+      <a class="btn btn-navy" href={link()}>메인으로</a>
+    </div>
+  </div>
+</BaseLayout>

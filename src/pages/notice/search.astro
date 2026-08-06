@@ -1,0 +1,97 @@
+---
+import SubLayout from '../../layouts/SubLayout.astro';
+import { notices, catLabel } from '../../data/notices';
+import { link } from '../../site';
+
+const index = notices.map((n) => ({
+  id: n.id,
+  title: n.title,
+  dept: n.dept,
+  date: n.date,
+  cat: catLabel(n.cat),
+  body: [...n.body, ...(n.bullets ?? []), n.closing ?? ''].join(' '),
+}));
+const viewBase = link('notice/view/');
+---
+<SubLayout
+  title="공지사항"
+  eng="NOTICE"
+  desc="교내 상황 및 학사 운영에 관한 안내입니다."
+  active="notice"
+  accent="v-notice"
+  current="전체 공지"
+>
+  <div class="page-title">
+    <h2>공지 검색</h2>
+    <span class="util">전체 {notices.length}건 대상</span>
+  </div>
+
+  <div class="search-bar" data-reveal>
+    <span class="total" id="result-count">검색어를 입력해 주세요.</span>
+    <form action={link('notice/search/')} method="get" id="search-form">
+      <select name="field" id="search-field" aria-label="검색 분류">
+        <option value="title">제목</option>
+        <option value="dept">작성 부서</option>
+        <option value="body">내용</option>
+      </select>
+      <input type="search" name="q" id="search-input" placeholder="검색어를 입력하세요" aria-label="검색어" />
+      <button type="submit">검색</button>
+    </form>
+  </div>
+
+  <div class="table-wrap">
+    <table class="board-table list-table">
+      <thead>
+        <tr>
+          <th style="width:80px">번호</th>
+          <th style="width:110px">분류</th>
+          <th>제목</th>
+          <th style="width:120px">작성 부서</th>
+          <th style="width:110px">등록일</th>
+        </tr>
+      </thead>
+      <tbody id="search-result">
+        <tr><td class="center" colspan="5" style="padding:44px 0">검색어를 입력하면 결과가 표시됩니다.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="view-actions">
+    <a class="btn btn-navy" href={link('notice/')}>전체 공지 보기</a>
+  </div>
+
+  <script define:vars={{ index, viewBase }}>
+    const params = new URLSearchParams(location.search);
+    const q = (params.get('q') ?? '').trim();
+    const field = params.get('field') ?? 'title';
+    const input = document.getElementById('search-input');
+    const select = document.getElementById('search-field');
+    const count = document.getElementById('result-count');
+    const tbody = document.getElementById('search-result');
+
+    input.value = q;
+    select.value = ['title', 'dept', 'body'].includes(field) ? field : 'title';
+
+    const escape = (text) =>
+      text.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+    if (q) {
+      const needle = q.toLowerCase();
+      const hits = index.filter((n) => String(n[select.value] ?? '').toLowerCase().includes(needle));
+      count.innerHTML = `“${escape(q)}” 검색 결과 <b>${hits.length}</b>건`;
+      tbody.innerHTML = hits.length
+        ? hits
+            .map(
+              (n) => `<tr>
+                <td class="center">${n.id}</td>
+                <td class="center"><span class="cat">${escape(n.cat)}</span></td>
+                <td class="subject"><a href="${viewBase}${n.id}/">${escape(n.title)}</a></td>
+                <td class="center">${escape(n.dept)}</td>
+                <td class="center">${escape(n.date)}</td>
+              </tr>`
+            )
+            .join('')
+        : '<tr><td class="center" colspan="5" style="padding:44px 0">검색 결과가 없습니다.</td></tr>';
+    }
+  </script>
+</SubLayout>

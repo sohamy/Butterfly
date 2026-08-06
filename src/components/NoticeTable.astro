@@ -1,0 +1,45 @@
+---
+import { catLabel } from '../data/notices';
+import { link } from '../site';
+
+const { items = [], fixed = [], empty = '등록된 공지가 없습니다.' } = Astro.props;
+---
+<div class="table-wrap" id="list">
+  <table class="board-table list-table">
+    <thead>
+      <tr>
+        <th style="width:80px">번호</th>
+        <th style="width:110px">분류</th>
+        <th>제목</th>
+        <th style="width:120px">작성 부서</th>
+        <th style="width:110px">등록일</th>
+      </tr>
+    </thead>
+    <tbody>
+      {fixed.map((n) => (
+        <tr class="fixed">
+          <td class="center"><span class="badge imp">공지</span></td>
+          <td class="center"><span class="cat">{catLabel(n.cat)}</span></td>
+          <td class="subject"><a href={link(`notice/view/${n.id}/`)}>{n.title}</a></td>
+          <td class="center">{n.dept}</td>
+          <td class="center">{n.date}</td>
+        </tr>
+      ))}
+      {items.map((n) => (
+        <tr>
+          <td class="center">{n.id}</td>
+          <td class="center"><span class="cat">{catLabel(n.cat)}</span></td>
+          <td class="subject">
+            <a href={link(`notice/view/${n.id}/`)}>{n.title}</a>
+            {n.isNew && <span class="badge new">NEW</span>}
+          </td>
+          <td class="center">{n.dept}</td>
+          <td class="center">{n.date}</td>
+        </tr>
+      ))}
+      {items.length === 0 && fixed.length === 0 && (
+        <tr><td class="center" colspan="5" style="padding:44px 0">{empty}</td></tr>
+      )}
+    </tbody>
+  </table>
+</div>

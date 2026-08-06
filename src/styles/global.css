@@ -476,6 +476,53 @@ table.board-table tr.term-row td{background:var(--paper-2);font-weight:700;color
 .pager a,.pager span{min-width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line);color:var(--muted);text-decoration:none;font-size:13px;background:#fff}
 .pager a:hover{border-color:var(--navy);color:var(--navy)}
 .pager .on{background:var(--navy);border-color:var(--navy);color:#fff}
+.pager span:not(.on){color:var(--line-strong);background:var(--paper)}
+
+/* 공지 상세 */
+.view{border:1px solid var(--line);background:#fff}
+.view-head{padding:26px 28px;border-bottom:1px solid var(--line);background:var(--paper)}
+.view-head h3{margin:10px 0 14px;font-size:22px;letter-spacing:-.03em;color:var(--navy);line-height:1.4}
+.view-head dl{display:flex;flex-wrap:wrap;gap:8px 26px;margin:0;font-size:13px}
+.view-head dl div{display:flex;gap:8px}
+.view-head dt{color:var(--muted)}
+.view-head dt:after{content:" ·"}
+.view-head dd{margin:0;color:var(--text)}
+.view-body{padding:32px 28px}
+.view-body p{margin:0 0 16px;font-size:15.5px;line-height:1.9}
+.view-list{margin:22px 0;padding:20px 22px 20px 40px;background:var(--paper);border-left:3px solid var(--blue)}
+.view-list li{margin-bottom:8px;font-size:14.5px}
+.view-list li:last-child{margin-bottom:0}
+.view-closing{color:var(--muted);border-top:1px dashed var(--line);padding-top:16px;margin-top:24px!important;font-size:14.5px!important}
+.view-file{display:flex;gap:14px;align-items:center;border-top:1px solid var(--line);padding:16px 28px;background:#fbfcfd;font-size:13.5px;color:var(--muted)}
+.view-file b{color:var(--navy)}
+
+.view-nav{border:1px solid var(--line);border-top:0;background:#fff}
+.view-nav div{display:flex;gap:16px;align-items:center;padding:13px 28px;border-top:1px solid var(--line);font-size:14px}
+.view-nav b{flex:none;width:60px;color:var(--muted);font-size:12.5px;font-weight:600}
+.view-nav b:before{content:"▲ ";font-size:9px;color:var(--line-strong)}
+.view-nav div:last-child b:before{content:"▼ ";font-size:9px}
+.view-nav a{color:var(--text);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.view-nav a:hover{color:var(--blue);text-decoration:underline}
+.view-nav span{color:var(--muted)}
+.view-actions{display:flex;justify-content:flex-end;margin-top:24px}
+.page-title .util a{color:var(--blue)}
+
+/* 사이트맵 */
+.sitemap{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.sitemap-group{border:1px solid var(--line);border-top:3px solid var(--navy);background:#fff;padding:22px 24px}
+.sitemap-group h2{margin:0 0 12px;font-size:18px;letter-spacing:-.03em}
+.sitemap-group h2 a{color:var(--navy);text-decoration:none}
+.sitemap-group h2 a:hover{text-decoration:underline}
+.sitemap-group ul{list-style:none;margin:0;padding:0}
+.sitemap-group li{border-top:1px solid var(--line)}
+.sitemap-group li a{display:block;padding:10px 0 10px 12px;color:var(--text);text-decoration:none;font-size:14px}
+.sitemap-group li a:before{content:"· ";color:var(--line-strong)}
+.sitemap-group li a:hover{color:var(--blue)}
+
+/* 푸터 관련기관 이동 */
+.family-form{display:flex;gap:8px}
+.family-form button{border:1px solid #4a5566;background:#39485c;color:#dbe2ea;padding:0 16px;font:inherit;font-size:13px;cursor:pointer}
+.family-form button:hover{background:#4a5c75}
 
 /* ===== 반응형 ================================================ */
 
@@ -501,6 +548,7 @@ table.board-table tr.term-row td{background:var(--paper-2);font-weight:700;color
   .zone-list .zones{grid-template-columns:repeat(2,1fr)}
   .apply-grid,.steps,.howto{grid-template-columns:repeat(2,1fr)}
   .apply-summary{grid-template-columns:repeat(2,1fr)}
+  .sitemap{grid-template-columns:repeat(2,1fr)}
 }
 
 @media(max-width:720px){
@@ -522,4 +570,8 @@ table.board-table tr.term-row td{background:var(--paper-2);font-weight:700;color
   .month .days .ev{font-size:10.5px;padding:2px 4px}
   .search-bar form{width:100%}
   .search-bar input{flex:1;min-width:0}
+  .sitemap{grid-template-columns:1fr}
+  .view-head,.view-body,.view-file,.view-nav div{padding-left:18px;padding-right:18px}
+  .list-table td.center:nth-child(2){display:none}
+  .list-table thead th:nth-child(2){display:none}
 }

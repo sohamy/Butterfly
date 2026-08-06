@@ -6,10 +6,10 @@ const { active } = Astro.props;
   <div class="inner">
     <span class="util-alert"><i></i>감염병 위기경보 <b>심각</b> 단계 발령 중 · 캠퍼스 출입 통제</span>
     <nav aria-label="유틸리티 메뉴">
-      <a href={link('notice/')}>학사포털</a>
-      <a href={link('notice/')}>중앙도서관</a>
-      <a href={link('calendar/')}>사이트맵</a>
-      <a href={link()} class="lang">ENGLISH</a>
+      <a href={link('guide/')}>학사포털</a>
+      <a href={link('notice/view/26/')}>중앙도서관</a>
+      <a href={link('notice/search/')}>공지검색</a>
+      <a href={link('sitemap/')} class="lang">전체메뉴</a>
     </nav>
   </div>
 </div>
@@ -34,10 +34,11 @@ const { active } = Astro.props;
       ))}
     </nav>
     <div class="header-tools">
-      <div class="header-search">
-        <input type="search" placeholder="통합검색" aria-label="통합검색" />
-        <button type="button" aria-label="검색">⌕</button>
-      </div>
+      <form class="header-search" action={link('notice/search/')} method="get">
+        <input type="search" name="q" placeholder="통합검색" aria-label="통합검색" />
+        <input type="hidden" name="field" value="title" />
+        <button type="submit" aria-label="검색">⌕</button>
+      </form>
     </div>
   </div>
 </header>

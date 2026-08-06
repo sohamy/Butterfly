@@ -32,8 +32,8 @@ export const lnb: Record<string, { label: string; href: string }[]> = {
   ],
   notice: [
     { label: '전체 공지', href: link('notice/') },
-    { label: '학사', href: link('notice/#list') },
-    { label: '보건 · 안전', href: link('notice/#list') },
-    { label: '상황실 알림', href: link('notice/#list') },
+    { label: '학사', href: link('notice/category/academic/') },
+    { label: '보건 · 안전', href: link('notice/category/health/') },
+    { label: '상황실 알림', href: link('notice/category/situation/') },
   ],
 };

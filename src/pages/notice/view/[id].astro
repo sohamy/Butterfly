@@ -1,0 +1,74 @@
+---
+import SubLayout from '../../../layouts/SubLayout.astro';
+import { notices, catLabel } from '../../../data/notices';
+import { link } from '../../../site';
+
+export function getStaticPaths() {
+  return notices.map((notice, index) => ({
+    params: { id: String(notice.id) },
+    props: {
+      notice,
+      prev: notices[index - 1] ?? null,
+      next: notices[index + 1] ?? null,
+    },
+  }));
+}
+
+const { notice, prev, next } = Astro.props;
+const lnbCurrent = { academic: '학사', health: '보건 · 안전', situation: '상황실 알림' }[notice.cat];
+---
+<SubLayout
+  title="공지사항"
+  eng="NOTICE"
+  desc="교내 상황 및 학사 운영에 관한 안내입니다."
+  active="notice"
+  accent="v-notice"
+  current={lnbCurrent}
+>
+  <div class="page-title">
+    <h2>공지 상세</h2>
+    <span class="util"><a href={link(`notice/category/${notice.cat}/`)}>{catLabel(notice.cat)}</a> 분류</span>
+  </div>
+
+  <article class="view">
+    <header class="view-head">
+      <span class="cat">{catLabel(notice.cat)}</span>
+      <h3>{notice.title}</h3>
+      <dl>
+        <div><dt>작성 부서</dt><dd>{notice.dept}</dd></div>
+        <div><dt>등록일</dt><dd>{notice.date}</dd></div>
+        <div><dt>조회</dt><dd>{notice.views}</dd></div>
+      </dl>
+    </header>
+
+    <div class="view-body">
+      {notice.body.map((p) => <p>{p}</p>)}
+      {notice.bullets && (
+        <ul class="view-list">
+          {notice.bullets.map((b) => <li>{b}</li>)}
+        </ul>
+      )}
+      {notice.closing && <p class="view-closing">{notice.closing}</p>}
+    </div>
+
+    <footer class="view-file">
+      <b>첨부파일</b>
+      <span>등록된 첨부파일이 없습니다.</span>
+    </footer>
+  </article>
+
+  <nav class="view-nav" aria-label="이전 다음 글">
+    <div>
+      <b>이전 글</b>
+      {prev ? <a href={link(`notice/view/${prev.id}/`)}>{prev.title}</a> : <span>이전 글이 없습니다.</span>}
+    </div>
+    <div>
+      <b>다음 글</b>
+      {next ? <a href={link(`notice/view/${next.id}/`)}>{next.title}</a> : <span>다음 글이 없습니다.</span>}
+    </div>
+  </nav>
+
+  <div class="view-actions">
+    <a class="btn btn-navy" href={link('notice/')}>목록으로</a>
+  </div>
+</SubLayout>

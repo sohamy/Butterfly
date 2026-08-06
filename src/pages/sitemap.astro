@@ -1,0 +1,93 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { link } from '../site';
+import { categories } from '../data/notices';
+
+const map = [
+  {
+    title: '대학안내',
+    href: link('about/'),
+    items: [
+      ['감염 상황 기록', link('about/')],
+      ['캠퍼스 구역 안내', link('about/#zone')],
+    ],
+  },
+  {
+    title: '학사안내',
+    href: link('guide/'),
+    items: [
+      ['운영 시스템', link('guide/#system')],
+      ['감염 진행 단계', link('guide/#infection')],
+      ['능력치 배분', link('guide/#stats')],
+    ],
+  },
+  {
+    title: '학사일정',
+    href: link('calendar/'),
+    items: [
+      ['전체 일정표', link('calendar/#table')],
+      ['월간 달력', link('calendar/#month')],
+      ['운영 방식', link('calendar/#howto')],
+    ],
+  },
+  {
+    title: '모집요강',
+    href: link('apply/'),
+    items: [
+      ['모집 개요', link('apply/#summary')],
+      ['포지션 안내', link('apply/#position')],
+      ['신청 절차', link('apply/#step')],
+      ['자주 묻는 질문', link('apply/#faq')],
+    ],
+  },
+  {
+    title: '공지사항',
+    href: link('notice/'),
+    items: [
+      ['전체 공지', link('notice/')],
+      ...categories.map((c) => [c.label, link(`notice/category/${c.key}/`)]),
+      ['공지 검색', link('notice/search/')],
+    ],
+  },
+  {
+    title: '이용 안내',
+    href: link('privacy/'),
+    items: [
+      ['개인정보처리방침', link('privacy/')],
+      ['이메일무단수집거부', link('privacy/#email')],
+    ],
+  },
+];
+---
+<BaseLayout title="사이트맵" active="sitemap">
+  <section class="sub-visual v-notice">
+    <div class="inner">
+      <p class="eng">SITEMAP</p>
+      <h1>사이트맵</h1>
+      <p>해원국립대학교 홈페이지의 전체 메뉴입니다.</p>
+    </div>
+  </section>
+
+  <nav class="breadcrumb" aria-label="현재 위치">
+    <div class="inner">
+      <a class="home" href={link()}>홈</a>
+      <span class="sep">›</span>
+      <b>사이트맵</b>
+    </div>
+  </nav>
+
+  <div class="inner" style="padding:54px 24px 84px">
+    <div class="sitemap">
+      {map.map((group) => (
+        <div class="sitemap-group" data-reveal>
+          <h2><a href={group.href}>{group.title}</a></h2>
+          <ul>
+            {group.items.map(([label, href]) => (
+              <li><a href={href}>{label}</a></li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

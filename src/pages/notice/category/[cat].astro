@@ -1,0 +1,48 @@
+---
+import SubLayout from '../../../layouts/SubLayout.astro';
+import NoticeTable from '../../../components/NoticeTable.astro';
+import { notices, categories } from '../../../data/notices';
+import { link } from '../../../site';
+
+export function getStaticPaths() {
+  return categories.map((category) => ({
+    params: { cat: category.key },
+    props: { category },
+  }));
+}
+
+const { category } = Astro.props;
+const items = notices.filter((n) => n.cat === category.key);
+---
+<SubLayout
+  title="공지사항"
+  eng="NOTICE"
+  desc="교내 상황 및 학사 운영에 관한 안내입니다."
+  active="notice"
+  accent="v-notice"
+  current={category.label}
+>
+  <div class="page-title">
+    <h2>{category.label}</h2>
+    <span class="util">분류별 공지</span>
+  </div>
+
+  <div class="search-bar" data-reveal>
+    <span class="total">{category.label} 분류 <b>{items.length}</b>건</span>
+    <form action={link('notice/search/')} method="get">
+      <select name="field" aria-label="검색 분류">
+        <option value="title">제목</option>
+        <option value="dept">작성 부서</option>
+        <option value="body">내용</option>
+      </select>
+      <input type="search" name="q" placeholder="검색어를 입력하세요" aria-label="검색어" />
+      <button type="submit">검색</button>
+    </form>
+  </div>
+
+  <NoticeTable items={items} empty="해당 분류의 공지가 없습니다." />
+
+  <div class="view-actions">
+    <a class="btn btn-navy" href={link('notice/')}>전체 공지 보기</a>
+  </div>
+</SubLayout>

@@ -1,0 +1,56 @@
+---
+import SubLayout from '../../layouts/SubLayout.astro';
+import NoticeTable from '../../components/NoticeTable.astro';
+import { listNotices, fixedNotices, notices } from '../../data/notices';
+import { link } from '../../site';
+
+export function getStaticPaths({ paginate }) {
+  return paginate(listNotices, { pageSize: 8 });
+}
+
+const { page } = Astro.props;
+const pageHref = (n: number) => (n === 1 ? link('notice/') : link(`notice/${n}/`));
+const pages = Array.from({ length: page.lastPage }, (_, i) => i + 1);
+---
+<SubLayout
+  title="공지사항"
+  eng="NOTICE"
+  desc="교내 상황 및 학사 운영에 관한 안내입니다."
+  active="notice"
+  accent="v-notice"
+  current="전체 공지"
+>
+  <div class="page-title">
+    <h2>전체 공지</h2>
+    <span class="util">최종 갱신 {notices[0].date}</span>
+  </div>
+
+  <div class="search-bar" data-reveal>
+    <span class="total">전체 <b>{notices.length}</b>건 · {page.currentPage} / {page.lastPage} 페이지</span>
+    <form action={link('notice/search/')} method="get">
+      <select name="field" aria-label="검색 분류">
+        <option value="title">제목</option>
+        <option value="dept">작성 부서</option>
+        <option value="body">내용</option>
+      </select>
+      <input type="search" name="q" placeholder="검색어를 입력하세요" aria-label="검색어" />
+      <button type="submit">검색</button>
+    </form>
+  </div>
+
+  <NoticeTable items={page.data} fixed={page.currentPage === 1 ? fixedNotices : []} />
+
+  <nav class="pager" aria-label="페이지 이동">
+    {page.currentPage > 1 ? <a href={pageHref(page.currentPage - 1)} aria-label="이전 페이지">‹</a> : <span aria-hidden="true">‹</span>}
+    {pages.map((n) => n === page.currentPage
+      ? <span class="on" aria-current="page">{n}</span>
+      : <a href={pageHref(n)}>{n}</a>
+    )}
+    {page.currentPage < page.lastPage ? <a href={pageHref(page.currentPage + 1)} aria-label="다음 페이지">›</a> : <span aria-hidden="true">›</span>}
+  </nav>
+
+  <div class="calendar-note" data-reveal>
+    <b>문의</b>
+    <span>공지 내용에 관한 문의는 상황실(093-000-9393) 또는 학생지원처(093-000-0111)로 연락해 주세요. 야간에는 상황실만 운영됩니다.</span>
+  </div>
+</SubLayout>
