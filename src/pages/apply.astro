@@ -1,0 +1,110 @@
+---
+import SubLayout from '../layouts/SubLayout.astro';
+import { link } from '../site';
+
+const summary = [
+  ['모집 인원', '12명 내외'],
+  ['포지션', '군인 · 연구원 · 대학생'],
+  ['운영 기간', '총 12일차'],
+  ['접수 방식', '선착순 · 포지션 선점'],
+];
+
+const steps = [
+  ['모집요강 확인', '세계관과 운영 규정을 먼저 읽어 주세요. 사망 판정이 포함됩니다.'],
+  ['포지션 선택', '군인 · 연구원은 정원이 1명씩이며 선점 순으로 확정됩니다.'],
+  ['프로필 제출', '이름, 학과 또는 소속, 능력치 배분, 남게 된 이유를 작성합니다.'],
+  ['확정 및 합류', '검토 후 안내드리며, 다음 일차부터 바로 참가할 수 있습니다.'],
+];
+
+const faq = [
+  ['전투가 서툰 캐릭터도 참가할 수 있나요?', '가능합니다. 조사, 응급처치, 기록 해독 등 전투 외에도 기여할 수 있는 판정이 많습니다. 능력치는 전투에 몰아주지 않아도 됩니다.'],
+  ['캐릭터가 사망하면 어떻게 되나요?', '사망 이후에는 회상 장면 참여가 가능하며, 원할 경우 새 캐릭터로 재합류할 수 있습니다. 감염체로 등장하는 선택지도 있습니다.'],
+  ['감염되면 바로 탈락인가요?', '아닙니다. 감염은 잠복 → 초기 증상 → 진행 → 말기 → 완전 변이 순으로 진행되며, 억제제로 늦출 수 있습니다. 그 사이의 이야기가 핵심입니다.'],
+  ['중간에 합류할 수 있나요?', '가능합니다. 다만 3일차부터는 시리어스 구간이므로, 합류 시점에 맞춘 등장 사유가 필요합니다.'],
+];
+---
+<SubLayout
+  title="모집요강"
+  eng="ADMISSION"
+  desc="모든 생존자는 서로 다른 이유로 이 캠퍼스에 남아 있습니다."
+  active="apply"
+  accent="v-apply"
+  current="모집 개요"
+>
+  <div class="page-title">
+    <h2>모집 개요</h2>
+    <span class="util">2025학년도 수시 · 상시 모집</span>
+  </div>
+
+  <section class="block" id="summary">
+    <div class="apply-summary" data-reveal>
+      {summary.map(([name, value]) => (
+        <div><span>{name}</span><b>{value}</b></div>
+      ))}
+    </div>
+    <div class="notice-strip" data-reveal>
+      <b>필독</b>
+      <span>조사, 전투, 부상, 감염, 캐릭터 사망 요소가 포함되어 있습니다. 참가 전 <a href={link('guide/')}>학사안내</a>를 확인해 주세요.</span>
+    </div>
+  </section>
+
+  <section class="block" id="position">
+    <h3>포지션 안내</h3>
+    <p class="lead">군인과 연구원은 선점 포지션이며, 그 외 참가 캐릭터는 모두 대학생으로 구성됩니다.</p>
+    <div class="apply-grid">
+      <div class="apply-card point" data-reveal>
+        <span class="cap">MPC</span>
+        <h4>운영 캐릭터</h4>
+        <ul>
+          <li>군인 <b>1명</b></li>
+          <li>연구원 <b>1명</b></li>
+          <li>학생회장 <b>1명</b></li>
+        </ul>
+        <p>사건의 핵심 정보를 쥐고 스토리를 밀어 올립니다. 일부는 정해진 시점에 이탈합니다.</p>
+      </div>
+      <div class="apply-card" data-reveal>
+        <span class="cap">POSITION RATIO</span>
+        <h4>포지션 구성</h4>
+        <p class="ratio">군인 : 연구원 : 대학생<strong>1 : 1 : 10</strong></p>
+        <div class="ratio-bar" aria-hidden="true"><i class="s"></i><i class="r"></i><i class="g"></i></div>
+        <p>군인은 힘, 연구원은 지식을 최대 10까지 설정할 수 있습니다.</p>
+      </div>
+      <div class="apply-card" data-reveal>
+        <span class="cap">GENERAL</span>
+        <h4>대학생</h4>
+        <p>전공과 학년은 자유롭게 설정할 수 있습니다. 다만 봉쇄 이후에도 캠퍼스에 남게 된 이유는 세계관과 충돌하지 않아야 합니다.</p>
+        <p>전투 경험이 없는 캐릭터도 환영합니다. 살아남는 방법은 싸움만이 아닙니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="step">
+    <h3>신청 절차</h3>
+    <div class="steps" data-reveal>
+      {steps.map(([name, desc]) => (
+        <div class="step"><b>{name}</b><p>{desc}</p></div>
+      ))}
+    </div>
+  </section>
+
+  <section class="block" id="faq">
+    <h3>자주 묻는 질문</h3>
+    <div class="faq" data-reveal>
+      {faq.map(([q, a], i) => (
+        <details open={i === 0}>
+          <summary>{q}</summary>
+          <div class="answer">{a}</div>
+        </details>
+      ))}
+    </div>
+
+    <div class="apply-banner" data-reveal>
+      <div>
+        <span class="eng">FINAL DIRECTIVE</span>
+        <h3>백신이 실제로 존재하는지는 누구도 알지 못합니다.</h3>
+        <p>하지만 이대로라면 모두가 죽습니다. 남을 이유가 있는 사람들의 참가를 기다립니다.</p>
+      </div>
+      <a class="btn btn-primary" href={link('notice/')}>참가 문의</a>
+    </div>
+  </section>
+</SubLayout>

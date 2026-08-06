@@ -1,26 +1,21 @@
 ---
-const menu = [
-  ['#about', '대학안내'],
-  ['#guide', '학사안내'],
-  ['#calendar', '학사일정'],
-  ['#apply', '모집요강'],
-  ['#notice', '공지사항'],
-];
+import { nav, link } from '../site';
+const { active } = Astro.props;
 ---
 <div class="util-bar">
   <div class="inner">
     <span class="util-alert"><i></i>감염병 위기경보 <b>심각</b> 단계 발령 중 · 캠퍼스 출입 통제</span>
     <nav aria-label="유틸리티 메뉴">
-      <a href="#notice">학사포털</a>
-      <a href="#notice">중앙도서관</a>
-      <a href="#calendar">사이트맵</a>
-      <a href="#home" class="lang">ENGLISH</a>
+      <a href={link('notice/')}>학사포털</a>
+      <a href={link('notice/')}>중앙도서관</a>
+      <a href={link('calendar/')}>사이트맵</a>
+      <a href={link()} class="lang">ENGLISH</a>
     </nav>
   </div>
 </div>
 <header class="site-header">
   <div class="inner">
-    <a class="brand" href="#home">
+    <a class="brand" href={link()}>
       <svg class="crest" width="46" height="46" viewBox="0 0 46 46" aria-hidden="true">
         <circle cx="23" cy="23" r="21.5" fill="none" stroke="#0d2a52" stroke-width="1.5" />
         <circle cx="23" cy="23" r="17" fill="#0d2a52" />
@@ -34,7 +29,9 @@ const menu = [
       </span>
     </a>
     <nav class="gnb" aria-label="주요 메뉴">
-      {menu.map(([href, label]) => <a href={href}>{label}</a>)}
+      {nav.map((item) => (
+        <a href={item.href} aria-current={active === item.key ? 'page' : undefined}>{item.label}</a>
+      ))}
     </nav>
     <div class="header-tools">
       <div class="header-search">

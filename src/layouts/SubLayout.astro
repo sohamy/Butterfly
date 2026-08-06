@@ -1,0 +1,45 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { lnb, link } from '../site';
+
+const { title, eng, desc, active, accent = 'v-guide', current } = Astro.props;
+const menu = lnb[active] ?? [];
+---
+<BaseLayout title={title} active={active}>
+  <section class:list={['sub-visual', accent]}>
+    <div class="inner">
+      <p class="eng">{eng}</p>
+      <h1>{title}</h1>
+      {desc && <p>{desc}</p>}
+    </div>
+  </section>
+
+  <nav class="breadcrumb" aria-label="현재 위치">
+    <div class="inner">
+      <a class="home" href={link()}>홈</a>
+      <span class="sep">›</span>
+      <b>{title}</b>
+    </div>
+  </nav>
+
+  <div class="sub-body">
+    <aside class="lnb">
+      <h2>{title}</h2>
+      <ul>
+        {menu.map((item) => (
+          <li>
+            <a href={item.href} aria-current={item.label === current ? 'page' : undefined}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+      <div class="lnb-contact">
+        <b>문의</b>
+        학생지원처 093-000-0111<br />
+        상황실 093-000-9393 (24시간)
+      </div>
+    </aside>
+    <div class="sub-content">
+      <slot />
+    </div>
+  </div>
+</BaseLayout>

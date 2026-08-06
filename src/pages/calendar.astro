@@ -1,0 +1,133 @@
+---
+import SubLayout from '../layouts/SubLayout.astro';
+
+const rows = [
+  { term: '제1기 · 적응 기간', note: '판정 없음 · 상호작용 중심' },
+  { day: '1일차', date: '09.01', cat: '교내활동', cls: 'class', title: '개강 · 남겨진 사람들', desc: '흩어져 있던 생존자들이 학생회관에 모입니다. 첫 만남과 임시 거점 정비.' },
+  { day: '2일차', date: '09.02', cat: '교내활동', cls: 'class', title: '물약게임', desc: '긴장을 푸는 짧은 이벤트. 웃고 떠드는 사이 누군가는 감추고 싶은 것을 흘립니다.' },
+
+  { term: '제2기 · 현장조사 개시', note: '시리어스 돌입 · 사망 판정 적용' },
+  { day: '3일차', date: '09.03', cat: '현장조사', cls: 'field', title: '학생회관 수색', desc: '봉쇄 첫날의 기록이 발견됩니다. 그리고 학생회장이 시신으로 돌아옵니다.' },
+  { day: '4일차', date: '09.04', cat: '현장조사', cls: 'field', title: '중앙도서관 개방', desc: '초기 대응 문서와 캠퍼스 도면을 확보합니다. 의과대학으로 가는 경로가 드러납니다.' },
+  { day: '5일차', date: '09.05', cat: '비상대응', cls: 'risk', title: '진입로 확보', desc: '대학병원으로 향하는 길목의 무리를 밀어냅니다. 첫 대규모 전투이자 첫 중상자.' },
+  { day: '6일차', date: '09.06', cat: '현장조사', cls: 'field', title: '대학병원 조사', desc: '의약품과 보관 중이던 혈액 샘플을 회수합니다. 지하에서 무언가 움직인 흔적도 함께.' },
+
+  { term: '휴업 기간', note: '09.08 ~ 09.14 · 판정 없음' },
+  { day: '휴업', date: '09.08~14', cat: '휴업', cls: 'break', title: '이레 동안', desc: '감염이 조용히 진행됩니다. 장례, 물자 배분, 그리고 누구를 남길지에 대한 첫 다툼.' },
+
+  { term: '제3기 · 비상 운영', note: '되돌릴 수 없는 구간' },
+  { day: '7일차', date: '09.15', cat: '비상대응', cls: 'risk', title: '변이체 출현', desc: '기존 개체와 다른 무언가가 나타납니다. 군인 MPC가 이 전투에서 사망합니다.' },
+  { day: '8일차', date: '09.16', cat: '현장조사', cls: 'field', title: '생명과학관 조사', desc: '항체 데이터의 일부와 실험 기록을 확보합니다. 연구가 어디서 멈췄는지 드러납니다.' },
+  { day: '9일차', date: '09.17', cat: '교내활동', cls: 'class', title: '재정비', desc: '남은 물자를 나누고 부상자를 돌보는 하루. 마지막으로 서로에게 말을 건넬 수 있는 시간.' },
+  { day: '10일차', date: '09.18', cat: '비상대응', cls: 'risk', title: '연구동 진입', desc: '의과대학 연구동의 봉쇄를 뚫습니다. 카드키와 방호복 보유 여부가 생사를 가릅니다.' },
+
+  { term: '제4기 · 종료', note: '선택은 되돌릴 수 없습니다' },
+  { day: '11일차', date: '09.19', cat: '현장조사', cls: 'field', title: '최종 조사', desc: '백신을 완성할지, 진실을 공개할지, 이곳을 버릴지. 각자의 선택을 제출합니다.' },
+  { day: '12일차', date: '09.20', cat: '종강', cls: 'final', title: '마지막 날', desc: '모아온 것과 포기한 것의 합계가 결말이 됩니다.' },
+];
+
+// 9월 달력 (1일 = 월요일)
+const events: Record<number, { label: string; cls: string }> = {
+  1: { label: '1일차 개강', cls: 'class' },
+  2: { label: '2일차 물약게임', cls: 'class' },
+  3: { label: '3일차 학생회관', cls: 'field' },
+  4: { label: '4일차 중앙도서관', cls: 'field' },
+  5: { label: '5일차 진입로 확보', cls: 'risk' },
+  6: { label: '6일차 대학병원', cls: 'field' },
+  8: { label: '휴업 시작', cls: 'break' },
+  14: { label: '휴업 종료', cls: 'break' },
+  15: { label: '7일차 변이체', cls: 'risk' },
+  16: { label: '8일차 생명과학관', cls: 'field' },
+  17: { label: '9일차 재정비', cls: 'class' },
+  18: { label: '10일차 연구동', cls: 'risk' },
+  19: { label: '11일차 최종 조사', cls: 'field' },
+  20: { label: '12일차 종강', cls: 'final' },
+};
+const leading = 1; // 9/1 이전 빈 칸(일요일)
+const days = Array.from({ length: 30 }, (_, i) => i + 1);
+const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+
+const howto = [
+  ['판정 접수', '해당 일차 시작 후 24시간 이내에 조사 · 전투 행동을 제출합니다.'],
+  ['결과 공개', '접수 마감 후 운영이 판정 결과와 획득 항목을 일괄 공개합니다.'],
+  ['상호작용', '결과 공개 이후 다음 일차 시작 전까지 자유롭게 진행합니다.'],
+];
+---
+<SubLayout
+  title="학사일정"
+  eng="ACADEMIC CALENDAR"
+  desc="총 12일차 운영 · 사건 진행에 따라 일부 일정은 변동될 수 있습니다."
+  active="calendar"
+  accent="v-calendar"
+  current="전체 일정표"
+>
+  <div class="page-title">
+    <h2>전체 일정표</h2>
+    <span class="util">2025학년도 비상 운영 기준</span>
+  </div>
+
+  <section class="block" id="table">
+    <div class="cal-legend" data-reveal>
+      <span class="cat class">교내활동</span>
+      <span class="cat field">현장조사</span>
+      <span class="cat risk">비상대응</span>
+      <span class="cat break">휴업</span>
+      <span class="cat final">종강</span>
+    </div>
+    <div class="table-wrap" data-reveal>
+      <table class="board-table">
+        <thead>
+          <tr><th style="width:100px">일자</th><th style="width:110px">날짜</th><th style="width:120px">구분</th><th>운영 내용</th></tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => row.term ? (
+            <tr class="term-row"><td colspan="4">{row.term} — {row.note}</td></tr>
+          ) : (
+            <tr>
+              <td class="day">{row.day}</td>
+              <td class="num">{row.date}</td>
+              <td><span class:list={['cat', row.cls]}>{row.cat}</span></td>
+              <td><b>{row.title}</b><small>{row.desc}</small></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block" id="month">
+    <h3>월간 달력</h3>
+    <p class="lead">9월 운영 일정입니다. 휴업 기간에는 판정이 진행되지 않습니다.</p>
+    <div class="month" data-reveal>
+      <header>
+        <b>2025. 09</b>
+        <span>감염 발생 93일차 기준</span>
+      </header>
+      <div class="weekdays" aria-hidden="true">
+        {weekdays.map((w) => <span>{w}</span>)}
+      </div>
+      <div class="days">
+        {Array.from({ length: leading }).map(() => <div class="empty"></div>)}
+        {days.map((d) => (
+          <div class={d === 20 ? 'today' : undefined}>
+            <span class="date">{d}</span>
+            {events[d] && <span class:list={['ev', events[d].cls]}>{events[d].label}</span>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="howto">
+    <h3>운영 방식</h3>
+    <div class="howto" data-reveal>
+      {howto.map(([name, desc]) => (
+        <div><b>{name}</b><p>{desc}</p></div>
+      ))}
+    </div>
+    <div class="calendar-note" data-reveal>
+      <b>안내</b>
+      <span>참가자 사정에 따라 일차 간격은 조정될 수 있으며, 변경 사항은 공지사항을 통해 알려드립니다.</span>
+    </div>
+  </section>
+</SubLayout>

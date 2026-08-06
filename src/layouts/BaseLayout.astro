@@ -1,9 +1,14 @@
 ---
 import '../styles/global.css';
 import Header from '../components/Header.astro';
+import { link } from '../site';
+
 const {
-  title = '해원국립대학교 | HAEWON NATIONAL UNIVERSITY',
+  title = '해원국립대학교',
   description = '해원국립대학교 공식 홈페이지 — 극시리 좀비 아포칼립스 자캐커뮤니티 안내',
+  active,
+  theme = 'light',
+  popup = false,
 } = Astro.props;
 ---
 <!doctype html>
@@ -12,23 +17,23 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#0d2a52" />
-    <title>{title}</title>
+    <meta name="theme-color" content={theme === 'dark' ? '#090c0b' : '#0d2a52'} />
+    <title>{title} | 해원국립대학교</title>
   </head>
-  <body>
+  <body class={theme === 'dark' ? 'theme-dark' : undefined}>
     <a class="skip-link" href="#main">본문 바로가기</a>
-    <Header />
+    <Header active={active} />
     <main id="main"><slot /></main>
 
     <div class="foot-links">
       <div class="inner">
-        <a class="strong" href="#about">대학안내</a>
-        <a href="#guide">학사안내</a>
-        <a href="#calendar">학사일정</a>
-        <a href="#apply">모집요강</a>
-        <a href="#notice">공지사항</a>
-        <a href="#notice">개인정보처리방침</a>
-        <a href="#notice">이메일무단수집거부</a>
+        <a class="strong" href={link('about/')}>대학안내</a>
+        <a href={link('guide/')}>학사안내</a>
+        <a href={link('calendar/')}>학사일정</a>
+        <a href={link('apply/')}>모집요강</a>
+        <a href={link('notice/')}>공지사항</a>
+        <a href={link('notice/')}>개인정보처리방침</a>
+        <a href={link('notice/')}>이메일무단수집거부</a>
       </div>
     </div>
 
@@ -59,34 +64,26 @@ const {
       </div>
     </footer>
 
-    <div class="popup" id="popup">
-      <div class="pop-head">
-        <span>[긴급] 캠퍼스 출입 안내</span>
-        <button type="button" id="popup-x" aria-label="팝업 닫기">×</button>
+    {popup && (
+      <div class="popup" id="popup">
+        <div class="pop-head">
+          <span>[긴급] 캠퍼스 출입 안내</span>
+          <button type="button" id="popup-x" aria-label="팝업 닫기">×</button>
+        </div>
+        <div class="pop-body">
+          <strong>제93호 · 전면 폐쇄 연장</strong>
+          교내 전 구역 출입이 통제되고 있습니다. 잔류 인원은 학생회관 임시 거점으로 이동하시고, 야간 이동을 삼가 주시기 바랍니다.
+        </div>
+        <div class="pop-foot">
+          <span>학생지원처</span>
+          <button type="button" id="popup-close">오늘 하루 열지 않기</button>
+        </div>
       </div>
-      <div class="pop-body">
-        <strong>제93호 · 전면 폐쇄 연장</strong>
-        교내 전 구역 출입이 통제되고 있습니다. 잔류 인원은 학생회관 임시 거점으로 이동하시고, 야간 이동을 삼가 주시기 바랍니다.
-      </div>
-      <div class="pop-foot">
-        <span>학생지원처</span>
-        <button type="button" id="popup-close">오늘 하루 열지 않기</button>
-      </div>
-    </div>
+    )}
 
     <button class="to-top" id="to-top" type="button" aria-label="맨 위로">↑</button>
 
     <script>
-      // 부드러운 앵커 이동
-      document.querySelectorAll('a[href^="#"]').forEach((link) => {
-        link.addEventListener('click', (event) => {
-          const target = document.querySelector(link.getAttribute('href'));
-          if (!target) return;
-          event.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-      });
-
       // 등장 효과
       const revealed = document.querySelectorAll('[data-reveal]');
       if ('IntersectionObserver' in window) {
@@ -103,25 +100,7 @@ const {
         revealed.forEach((el) => el.classList.add('is-visible'));
       }
 
-      // 현재 메뉴 강조
-      const navLinks = [...document.querySelectorAll('.gnb a')];
-      const sections = navLinks
-        .map((link) => document.querySelector(link.getAttribute('href')))
-        .filter(Boolean);
-      if ('IntersectionObserver' in window && sections.length) {
-        const spy = new IntersectionObserver(
-          (entries) => entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            navLinks.forEach((link) =>
-              link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`)
-            );
-          }),
-          { rootMargin: '-40% 0px -55% 0px' }
-        );
-        sections.forEach((section) => spy.observe(section));
-      }
-
-      // 맨 위로 버튼
+      // 맨 위로
       const toTop = document.getElementById('to-top');
       const onScroll = () => toTop.classList.toggle('show', window.scrollY > 500);
       onScroll();
@@ -129,22 +108,26 @@ const {
       toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
       // 팝업 공지 (오늘 하루 열지 않기)
-      const popup = document.getElementById('popup');
-      const today = new Date().toDateString();
-      if (localStorage.getItem('hnu-popup') === today) popup.hidden = true;
-      document.getElementById('popup-x').addEventListener('click', () => (popup.hidden = true));
-      document.getElementById('popup-close').addEventListener('click', () => {
-        localStorage.setItem('hnu-popup', today);
-        popup.hidden = true;
-      });
+      const popupEl = document.getElementById('popup');
+      if (popupEl) {
+        const today = new Date().toDateString();
+        if (localStorage.getItem('hnu-popup') === today) popupEl.hidden = true;
+        document.getElementById('popup-x').addEventListener('click', () => (popupEl.hidden = true));
+        document.getElementById('popup-close').addEventListener('click', () => {
+          localStorage.setItem('hnu-popup', today);
+          popupEl.hidden = true;
+        });
+      }
 
-      // 감염 기록 타이머
+      // 감염 기록 타이머 (대학안내 페이지)
       const rec = document.getElementById('rec-time');
-      let seconds = 17;
-      setInterval(() => {
-        seconds = (seconds + 1) % 60;
-        if (rec) rec.textContent = `● REC 00:93:${String(seconds).padStart(2, '0')}`;
-      }, 1000);
+      if (rec) {
+        let seconds = 17;
+        setInterval(() => {
+          seconds = (seconds + 1) % 60;
+          rec.textContent = `● REC 00:93:${String(seconds).padStart(2, '0')}`;
+        }, 1000);
+      }
     </script>
   </body>
 </html>

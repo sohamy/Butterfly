@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { link } from '../site';
+
+const zones = [
+  ['학생회관', '생존자 임시 거점. 전기와 식수가 남아 있는 유일한 건물.', '개방', 'open'],
+  ['중앙도서관', '초기 대응 문서와 캠퍼스 도면 보관. 내부 조명 없음.', '부분 개방', ''],
+  ['대학병원', '의약품과 혈액 샘플 보관. 지하 이동 흔적 다수.', '위험', 'danger'],
+  ['의과대학 연구동', '백신 연구 최종 지점. 카드키 없이 진입 불가.', '봉쇄', 'danger'],
+];
+---
+<BaseLayout title="대학안내" active="about" theme="dark">
+  <section class="dark-visual">
+    <div class="tape" aria-hidden="true"></div>
+    <div class="bl-grid-bg" aria-hidden="true"></div>
+    <div class="bl-noise" aria-hidden="true"></div>
+    <div class="bl-scan" aria-hidden="true"></div>
+    <div class="inner">
+      <nav class="bl-crumb" aria-label="현재 위치">
+        <a href={link()}>HOME</a><span>/</span><span>대학안내</span>
+      </nav>
+      <div class="bl-head">
+        <span class="bl-rec" id="rec-time">● REC 00:93:17</span>
+        <span class="bl-eng"><i></i>EMERGENCY BROADCAST — HAEWON CAMPUS / DAY 093</span>
+        <h1>감염은 <em data-text="하루아침에">하루아침에</em><br />세상을 무너뜨렸다.</h1>
+        <p>이 페이지는 학교 소개가 아니라, 학교였던 곳의 기록입니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="dark-body">
+    <div class="bl-noise" aria-hidden="true"></div>
+    <div class="inner">
+      <div class="bl-grid">
+        <article class="bl-doc" data-reveal>
+          <div class="doc-meta">
+            <span>FILE / HNU-093-A</span>
+            <span>CLEARANCE / <b class="redacted">LEVEL 4</b></span>
+            <span>ISSUED / DAY 093</span>
+            <span>STATUS / 미회수</span>
+          </div>
+          <p>정체불명의 감염병이 처음 보고된 것은 93일 전이었습니다.</p>
+          <p>처음에는 흔한 신종 바이러스라고 발표되었습니다. 그러나 감염자는 사망 후 다시 일어나 살아 있는 사람을 무차별적으로 공격했습니다. 감염은 물림과 혈액 접촉으로 번졌고, 정부는 발생 지역을 봉쇄한 뒤 군을 투입했지만 방어선은 열흘을 버티지 못했습니다.</p>
+          <p>도시는 버려졌고 통신은 하나씩 끊어졌습니다. 남은 사람들은 식량과 의약품이 바닥나는 가운데 각자의 방식으로 버티고 있습니다.</p>
+
+          <h2>백신에 관하여</h2>
+          <blockquote>“해원국립대학교 의과대학에서 백신 연구가 진행되고 있었다.”</blockquote>
+          <p>사태 초기, 의과대학 연구팀은 감염을 막을 백신을 개발하고 있었습니다. 완성 직전 연구소는 외부와 연락이 끊겼고, 연구원들의 생사는 지금까지 확인되지 않았습니다.</p>
+          <div class="audio-log">
+            <span class="a-head"><i></i>LAST AUDIO LOG — 재생 시간 00:47</span>
+            <p>“…백신은 아직 완성되지 않았다. 하지만 연구는 끝나지 않았다. 자료와 샘플은… 캠퍼스 안에 남아 있다.”</p>
+            <div class="waveform" aria-hidden="true">
+              {Array.from({ length: 30 }).map((_, i) => <i style={`animation-delay:${(i % 9) * 0.11}s`}></i>)}
+            </div>
+          </div>
+
+          <h2>남겨진 사람들</h2>
+          <p>봉쇄선 안에는 미처 빠져나가지 못한 학생과, 명령이 끊긴 뒤에도 자리를 지킨 군인, 그리고 연구를 포기하지 못한 연구원이 남았습니다. 서로를 믿을 이유는 없지만, 혼자서는 하루도 버틸 수 없습니다.</p>
+          <p class="closing-line">남은 선택지는 하나. 캠퍼스 안으로 들어가 진실을 찾는 것.</p>
+        </article>
+
+        <aside class="bl-panel" data-reveal>
+          <h3>SYS. MONITOR</h3>
+          <dl>
+            <dt>LOCATION</dt><dd>해원국립대학교</dd>
+            <dt>STATUS</dt><dd class="danger">봉쇄 · 통제 불능</dd>
+            <dt>SURVIVORS</dt><dd>UNKNOWN</dd>
+            <dt>OBJECTIVE</dt><dd>백신 확보</dd>
+            <dt>LAST CONTACT</dt><dd>DAY 041 · 의과대학</dd>
+          </dl>
+          <div class="bl-track">
+            <span><i></i>잠복</span>
+            <span><i></i>초기 증상</span>
+            <span><i></i>진행</span>
+            <span><i></i>말기</span>
+            <span><i></i>완전 변이</span>
+          </div>
+        </aside>
+      </div>
+
+      <section class="zone-list" data-reveal>
+        <h3>CAMPUS ZONE — 조사 가능 구역</h3>
+        <div class="zones">
+          {zones.map(([name, desc, state, cls]) => (
+            <div class="zone">
+              <b>{name}</b>
+              <small>{desc}</small>
+              <span class:list={['st', cls]}>{state}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <div class="bl-foot">
+        <span>본 기록은 외부 반출이 금지되어 있습니다 · HNU-093</span>
+        <a href={link('guide/')}>학사안내로 돌아가기</a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
