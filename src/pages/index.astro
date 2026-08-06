@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+
+const stats = [
+  ['힘', '공격력·완력', '0–5'],
+  ['민첩', '회피·도주', '0–5'],
+  ['정신', '감염 저항', '0–5'],
+  ['지식', '조사 해석', '0–5'],
+  ['운', '아이템 발견', '0–5'],
+];
+
+const timeline = [
+  ['1D', '일상', '생존자들의 첫 만남과 관계 형성'],
+  ['2D', '물약게임', '가벼운 이벤트와 비밀의 균열'],
+  ['3D', '조사', '시리어스 돌입 · 학생회장 사망'],
+  ['4D', '조사', '중앙도서관 개방'],
+  ['5D', '전투', '대학병원 진입로 확보'],
+  ['6D', '조사', '대학병원 조사'],
+  ['휴식기', '1주일', '감염 진행 · 장례 · 내부 갈등'],
+  ['7D', '전투', '변이체 출현 · 군인 사망'],
+  ['8D', '조사', '생명과학관 조사'],
+  ['10D', '전투', '의과대학 연구동 진입'],
+  ['11D', '조사', '최종 조사와 선택'],
+  ['12D', '엔딩', '살아남은 자들이 맞이하는 결말'],
+];
+---
+<BaseLayout>
+  <section id="home" class="hero section-pad">
+    <div class="hero-grid"></div>
+    <div class="rec">● REC 00:93:17</div>
+    <div class="hero-copy">
+      <p class="eyebrow">RESTRICTED AREA // HAEWON CAMPUS</p>
+      <h1>감염은<br/><em>하루아침에</em><br/>세상을 무너뜨렸다.</h1>
+      <p class="hero-summary">감염 발생 93일째. 폐쇄된 해원국립대학교에 미완성 백신과 사태의 진실이 남아 있다.</p>
+      <a class="primary-button" href="#world">기록 열람</a>
+    </div>
+    <aside class="status-panel">
+      <div><span>LOCATION</span><strong>해원국립대학교</strong></div>
+      <div><span>STATUS</span><strong class="danger">봉쇄</strong></div>
+      <div><span>SURVIVORS</span><strong>UNKNOWN</strong></div>
+      <div><span>OBJECTIVE</span><strong>백신 확보</strong></div>
+    </aside>
+  </section>
+
+  <section id="world" class="content-section section-pad">
+    <SectionTitle code="01 / WORLD" title="세계관" subtitle="INCIDENT REPORT — DAY 93" />
+    <div class="document-card wide">
+      <p>정체불명의 감염병이 처음 발견된 것은 지금으로부터 93일 전이었다.</p>
+      <p>처음에는 단순한 신종 바이러스라고 알려졌지만, 감염자는 사망 후 다시 움직이기 시작했고 살아 있는 사람을 무차별적으로 공격했다. 감염은 물림과 혈액 접촉으로 전파되었으며, 정부는 감염 지역을 봉쇄하고 군을 투입했지만 상황은 빠르게 통제 불능에 빠졌다.</p>
+      <p>도시는 버려졌고, 통신은 하나둘 끊어졌다. 살아남은 사람들은 식량과 의약품이 바닥나가는 가운데 각자의 방식으로 버티고 있다.</p>
+      <blockquote>“해원국립대학교 의과대학에서 백신 연구가 진행되고 있었다.”</blockquote>
+      <p>사태 초기, 의과대학 연구팀은 감염을 막기 위한 백신을 개발했다. 하지만 연구가 완성되기 직전 연구소는 외부와 연락이 끊겼고, 연구원들의 생사 역시 확인되지 않았다.</p>
+      <div class="audio-log">
+        <span>LAST AUDIO LOG</span>
+        <p>“…백신은 아직 완성되지 않았다. 하지만 연구는 끝나지 않았다. 자료와 샘플은… 캠퍼스 안에 남아 있다.”</p>
+      </div>
+      <p class="closing-line">남은 선택지는 단 하나. 캠퍼스 안으로 들어가 진실을 찾는 것.</p>
+    </div>
+  </section>
+
+  <section id="system" class="content-section section-pad muted-bg">
+    <SectionTitle code="02 / SYSTEM" title="시스템" subtitle="생존은 수치가 아니라 선택으로 결정된다." />
+    <div class="warning-banner">본 커뮤니티에는 조사, 전투, 부상, 감염, 캐릭터 사망 요소가 포함되어 있습니다.</div>
+    <div class="card-grid">
+      <article class="system-card"><span>01</span><h3>조사</h3><p>캠퍼스의 개방 구역을 조사하여 백신 재료, 의약품, 무기, 기록과 생존자의 흔적을 확보합니다.</p></article>
+      <article class="system-card"><span>02</span><h3>전투</h3><p>좀비와 조우하면 전투가 발생합니다. 결과에 따라 무사 생환, 경상, 중상, 물림, 사망 판정이 이루어집니다.</p></article>
+      <article class="system-card"><span>03</span><h3>감염</h3><p>물림과 감염 혈액 노출은 감염 판정을 일으킵니다. 감염은 잠복, 초기, 진행, 말기 순으로 악화됩니다.</p></article>
+      <article class="system-card"><span>04</span><h3>백신</h3><p>혈액 샘플, 연구 기록, 항체 데이터, 합성 시약과 가동 가능한 연구시설을 확보해야 합니다.</p></article>
+      <article class="system-card"><span>05</span><h3>아이템</h3><p>응급처치 키트, 억제제, 방호복, 무기와 출입 카드는 조사 및 생존 확률에 직접 영향을 줍니다.</p></article>
+      <article class="system-card"><span>06</span><h3>엔딩</h3><p>백신, 탈출, 희생, 전멸, 진실, 은폐. 확보한 정보와 최종 선택이 결말을 결정합니다.</p></article>
+    </div>
+    <div class="infection-track">
+      <span>잠복</span><i></i><span>초기 증상</span><i></i><span>진행</span><i></i><span>말기</span><i></i><span>완전 변이</span>
+    </div>
+    <div class="stat-table">
+      {stats.map(([name, effect, range]) => <div><strong>{name}</strong><span>{effect}</span><b>{range}</b></div>)}
+      <p>* 군인은 힘, 연구원은 지식을 최대 10까지 설정할 수 있습니다.</p>
+    </div>
+  </section>
+
+  <section id="timeline" class="content-section section-pad">
+    <SectionTitle code="03 / TIMELINE" title="일정" subtitle="러닝 일정은 사건 진행에 따라 일부 변동될 수 있습니다." />
+    <div class="timeline">
+      {timeline.map(([day, type, text], index) => (
+        <div class:list={['timeline-item', type === '전투' && 'combat', type === '조사' && 'investigation', type === '엔딩' && 'ending']}>
+          <span class="day">{day}</span>
+          <span class="dot"></span>
+          <div><small>{type}</small><h3>{text}</h3></div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section id="character" class="content-section section-pad muted-bg">
+    <SectionTitle code="04 / CHARACTER" title="캐릭터 안내" subtitle="모든 생존자는 서로 다른 이유로 캠퍼스에 남아 있다." />
+    <div class="character-columns">
+      <div class="role-card mpc">
+        <span>MPC</span>
+        <h3>운영 캐릭터</h3>
+        <ul><li>군인 1명</li><li>연구원 1명</li><li>학생회장 1명</li></ul>
+        <p>스토리 진행과 사건의 핵심을 담당합니다.</p>
+      </div>
+      <div class="role-card">
+        <span>POSITION RATIO</span>
+        <h3>포지션 구성</h3>
+        <p class="role-ratio">군인 : 연구원 : 대학생<br /><strong>1 : 1 : 10</strong></p>
+        <p>군인과 연구원은 선점 포지션이며, 그 외 참가 캐릭터는 모두 대학생으로 구성됩니다.</p>
+      </div>
+      <div class="role-card">
+        <span>GENERAL</span>
+        <h3>대학생</h3>
+        <p>전공과 학년은 자유롭게 설정할 수 있으며, 감염 사태 이후에도 캠퍼스에 남게 된 이유가 세계관과 충돌하지 않아야 합니다.</p>
+      </div>
+    </div>
+    <div class="final-message">
+      <span>FINAL DIRECTIVE</span>
+      <p>백신이 실제로 존재하는지, 이미 사라진 희망에 불과한지는 누구도 알지 못한다.</p>
+      <strong>하지만 이대로라면 모두가 죽는다.</strong>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,34 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+const { title = '해원국립대학교', description = '극시리 자캐커뮤니티 소개 홈페이지' } = Astro.props;
+---
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0a0d0c" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+    <Header />
+    <main><slot /></main>
+    <footer class="site-footer">
+      <span>HAEWON NATIONAL UNIVERSITY // INCIDENT DAY 93</span>
+      <span>극시리 · 좀비 아포칼립스 · 조사 · 전투 · 감염</span>
+    </footer>
+    <script>
+      const links = document.querySelectorAll('a[href^="#"]');
+      links.forEach((link) => link.addEventListener('click', (event) => {
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          event.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }));
+    </script>
+  </body>
+</html>
